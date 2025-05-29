@@ -3,6 +3,8 @@ package com.dra.order_service.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.dra.order_service.enums.ProductStatus;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +17,6 @@ public class ProductData {
     private String name;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private ProductStatus status;
     // private List<OrderData> orders;
 }
