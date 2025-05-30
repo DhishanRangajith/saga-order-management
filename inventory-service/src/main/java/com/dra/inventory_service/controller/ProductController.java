@@ -6,7 +6,10 @@ import com.dra.inventory_service.annotation.IdMatches;
 import com.dra.inventory_service.annotation.ProductCreateValid;
 import com.dra.inventory_service.annotation.ProductUpdateValid;
 import com.dra.inventory_service.dto.ProductData;
+import com.dra.inventory_service.dto.request.CreateProductData;
 import com.dra.inventory_service.service.ProductService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -30,14 +33,14 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(dataList);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<ProductData> getProduct(@PathVariable Long id) {
-        ProductData data = this.productService.getProduct(id);
+    @GetMapping("{code}")
+    public ResponseEntity<ProductData> getProduct(@PathVariable String productCode) {
+        ProductData data = this.productService.getProduct(productCode);
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
     @PostMapping
-    public ResponseEntity<ProductData> createProduct(@RequestBody @ProductCreateValid ProductData productData) {
+    public ResponseEntity<ProductData> createProduct(@RequestBody @Valid CreateProductData productData) {
         ProductData data = this.productService.createProduct(productData);
         return ResponseEntity.status(HttpStatus.CREATED).body(data);
     }

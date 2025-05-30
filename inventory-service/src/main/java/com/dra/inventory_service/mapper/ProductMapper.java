@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import com.dra.inventory_service.dto.ProductData;
+import com.dra.inventory_service.dto.request.CreateProductData;
 import com.dra.inventory_service.entity.ProductEntity;
 
 @Mapper(componentModel = "spring")
@@ -17,6 +18,14 @@ public interface ProductMapper {
     @Mapping(target = "inventoryData", ignore = true)
     @Mapping(target = "inventoryReservations", ignore = true)
     ProductEntity productDataToProductEntity(ProductData productData);
+
+    @Mapping(target = "inventoryData", ignore = true)
+    @Mapping(target = "inventoryReservations", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "productCode", ignore = true)
+    ProductEntity createDataToEntity(CreateProductData productData);
 
     List<ProductData> productEntityListToProductDataList(List<ProductEntity> productEntityList);
     List<ProductEntity> productDataListToProductEntityList(List<ProductData> productDataList);

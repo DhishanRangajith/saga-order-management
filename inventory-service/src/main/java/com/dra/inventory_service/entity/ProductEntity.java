@@ -1,8 +1,10 @@
 package com.dra.inventory_service.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.dra.inventory_service.enums.ProductStatus;
+import com.dra.inventory_service.util.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -12,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,5 +45,14 @@ public class ProductEntity extends CommonEntity{
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<InventoryReservationEntity> inventoryReservations;
+
+    @Override
+    @PrePersist
+    public void createOn(){
+        super.setCreatedAt(LocalDateTime.now());
+        super.setUpdatedAt(LocalDateTime.now());
+        this.productCode = CommonUtil.generateNewProductCode();
+        this.status = this.status==null?ProductStatus.ACTIVE:this.status;
+    }
 
 }
