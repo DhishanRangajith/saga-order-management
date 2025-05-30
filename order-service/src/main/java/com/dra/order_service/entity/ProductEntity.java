@@ -35,4 +35,7 @@ public class ProductEntity extends CommonEntity{
     @Column(name = "status")
     private ProductStatus status;
 
+    @Column(name = "price")
+    private double price;
+
 }

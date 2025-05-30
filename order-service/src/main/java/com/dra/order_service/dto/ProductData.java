@@ -18,5 +18,6 @@ public class ProductData {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private ProductStatus status;
+    private double price;
     // private List<OrderData> orders;
 }
