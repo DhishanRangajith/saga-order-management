@@ -3,19 +3,12 @@ package com.dra.inventory_service.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.dra.inventory_service.annotation.IdMatches;
-import com.dra.inventory_service.annotation.ProductCreateValid;
-import com.dra.inventory_service.annotation.ProductUpdateValid;
 import com.dra.inventory_service.dto.ProductData;
 import com.dra.inventory_service.dto.request.CreateProductData;
-import com.dra.inventory_service.dto.request.InventorySearchData;
 import com.dra.inventory_service.dto.request.ProductSearchData;
 import com.dra.inventory_service.service.ProductService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
