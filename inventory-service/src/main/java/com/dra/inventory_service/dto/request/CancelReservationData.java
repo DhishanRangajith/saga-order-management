@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class CancelReservationData {
 
-    @NotNull(message = "Order is is required.")
+    @NotNull(message = "Order is required.")
     private Long orderId;
 }

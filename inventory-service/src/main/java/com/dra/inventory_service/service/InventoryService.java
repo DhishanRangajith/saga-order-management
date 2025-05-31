@@ -33,9 +33,11 @@ public class InventoryService {
 
     public Page<InventoryData> getInventotyData(InventorySearchData inventorySearchData){
         Pageable pageable = PageRequest.of(inventorySearchData.getPage(), inventorySearchData.getPageSize());
-        Specification<InventoryEntity> specification = InventorySpecification.containsProductName(inventorySearchData.getProductName())
-                                                        .and(InventorySpecification.containsProductCode(inventorySearchData.getProductCode()))
-                                                        .and(InventorySpecification.hasProductStatus(inventorySearchData.getProductStatus()));
+        Specification<InventoryEntity> specification = Specification.allOf(
+                                                            InventorySpecification.containsProductName(inventorySearchData.getProductName()),
+                                                            InventorySpecification.containsProductCode(inventorySearchData.getProductCode()),
+                                                            InventorySpecification.hasProductStatus(inventorySearchData.getProductStatus())
+                                                        );
 
         Page<InventoryEntity> entityPageList = this.inventoryRepository.findAll(specification, pageable);
         List<InventoryData> dataList = this.inventoryMapper.entityListTodtoList(entityPageList.getContent());

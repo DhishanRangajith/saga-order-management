@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ReservationSearchData {
-    private Long orderId;
-    private String productCode;
-    private String status;
+public class ProductSearchData {
     private int page;
     private int pageSize;
+    private String name;
+    private String productCode;
+    private String status;
 }

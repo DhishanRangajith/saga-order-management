@@ -1,13 +1,21 @@
 package com.dra.inventory_service.service;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.dra.inventory_service.dto.ProductData;
 import com.dra.inventory_service.dto.request.CreateProductData;
+import com.dra.inventory_service.dto.request.ProductSearchData;
 import com.dra.inventory_service.entity.ProductEntity;
 import com.dra.inventory_service.extension.NotFoundException;
 import com.dra.inventory_service.mapper.ProductMapper;
 import com.dra.inventory_service.repository.ProductRepository;
+import com.dra.inventory_service.repository.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,10 +25,18 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final ProductRepository productRepository;
 
-    public List<ProductData> getProductList(){
-        List<ProductEntity> entities = this.productRepository.findAll();
-        List<ProductData> dataList = this.productMapper.productEntityListToProductDataList(entities);
-        return dataList;
+    public Page<ProductData> getProductList(ProductSearchData productSearchData){
+        Specification<ProductEntity> specification = Specification.allOf(
+                ProductSpecification.containsName(productSearchData.getName()),
+                ProductSpecification.hasStatus(productSearchData.getStatus()),
+                ProductSpecification.containsProductCode(productSearchData.getProductCode())
+            );
+        Sort sort = Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(productSearchData.getPage(), productSearchData.getPageSize(), sort);
+        Page<ProductEntity> entityPageList = this.productRepository.findAll(specification, pageable);
+        List<ProductData> dataList = this.productMapper.productEntityListToProductDataList(entityPageList.getContent());
+        Page<ProductData> dataPageList = new PageImpl<>(dataList, pageable, entityPageList.getTotalElements());
+        return dataPageList;
     }
 
     public ProductData getProduct(String code){
@@ -43,9 +59,9 @@ public class ProductService {
         return data;
     }
 
-    //Only can update price and status
-    public ProductData partialUpdateProduct(Long id, ProductData productData){
-        ProductEntity entity = this.productRepository.findById(id).orElseThrow(
+    //Only can update price, name and status
+    public ProductData partialUpdateProduct(String code, CreateProductData productData){
+        ProductEntity entity = this.productRepository.findByProductCode(code).orElseThrow(
             () -> {throw new NotFoundException("Product is not found.");}
         );
 

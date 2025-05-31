@@ -1,29 +1,36 @@
 package com.dra.inventory_service.entity;
 
-import com.dra.inventory_service.enums.InventoryReservationStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "inventory_reservation")
+@Table(name = "inventory_reservations")
 @Getter
 @Setter
-public class InventoryReservationEntity extends CommonEntity{
+public class InventoryReservationEntity extends TimeEntity{
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @EmbeddedId
+    private ReservationId reservationId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    @MapsId("orderId")
+    @JsonBackReference
+    private OrderEntity order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
+    @MapsId("productId")
     @JsonManagedReference
     private ProductEntity product;
 
@@ -32,9 +39,5 @@ public class InventoryReservationEntity extends CommonEntity{
 
     @Column(name = "price")
     private Double price;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private InventoryReservationStatus status;
 
 }

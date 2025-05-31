@@ -31,11 +31,12 @@ public interface ProductMapper {
     List<ProductEntity> productDataListToProductEntityList(List<ProductData> productDataList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "price", source = "price")
-    @Mapping(target = "status", source = "status")
     @Mapping(target = "inventoryData", ignore = true)
     @Mapping(target = "inventoryReservations", ignore = true)
-    void updateEntityWithUpdatingFields(ProductData dto, @MappingTarget ProductEntity entity);
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "productCode", ignore = true)
+    void updateEntityWithUpdatingFields(CreateProductData dto, @MappingTarget ProductEntity entity);
 
 }

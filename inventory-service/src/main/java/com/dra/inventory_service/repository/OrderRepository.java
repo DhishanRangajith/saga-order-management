@@ -4,10 +4,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import com.dra.inventory_service.entity.ProductEntity;
+import com.dra.inventory_service.entity.OrderEntity;
 
 @Repository
-public interface ProductRepository extends JpaRepository<ProductEntity, Long>, JpaSpecificationExecutor<ProductEntity>{
+public interface OrderRepository extends JpaRepository<OrderEntity, Long>, JpaSpecificationExecutor<OrderEntity>{
 
-    Optional<ProductEntity> findByProductCode(String productCode);
+    Optional<OrderEntity> findByOrderId(Long orderId);
+    boolean existsByOrderId(Long orderId);
 }

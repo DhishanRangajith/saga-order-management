@@ -1,21 +1,18 @@
 package com.dra.inventory_service.annotation.validator;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Component;
-
-import com.dra.inventory_service.annotation.ProductCreateValid;
+import com.dra.inventory_service.annotation.ProductCodeValid;
 import com.dra.inventory_service.entity.ProductEntity;
 import com.dra.inventory_service.enums.ProductStatus;
 import com.dra.inventory_service.repository.ProductRepository;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ProductCodeValidator implements ConstraintValidator<ProductCreateValid, String>{
+public class ProductCodeValidator implements ConstraintValidator<ProductCodeValid, String>{
 
     private final ProductRepository productRepository;
 

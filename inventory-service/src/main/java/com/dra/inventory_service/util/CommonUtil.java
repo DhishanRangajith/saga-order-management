@@ -10,7 +10,7 @@ public class CommonUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String timestamp = LocalDateTime.now().format(formatter);
         int randomNum = ThreadLocalRandom.current().nextInt(1000, 9999);
-        return timestamp + "-" + randomNum;
+        return timestamp + "" + randomNum;
     }
 
 }

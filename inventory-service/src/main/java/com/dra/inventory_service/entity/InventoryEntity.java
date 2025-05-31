@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "inventory")
+@Table(name = "inventories")
 @Setter
 @Getter
 public class InventoryEntity extends CommonEntity{
