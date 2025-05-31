@@ -70,8 +70,9 @@ public class OrderService {
         orderEntity.setOrderId(orderCreateData.getOrderId());
         orderEntity.setStatus(ReservationStatus.RESERVED);
         OrderEntity savedOrderEntity = this.orderRepository.save(orderEntity);
-        savedOrderEntity.setReservations(new ArrayList<>());
 
+        List<InventoryReservationEntity> reservations = new ArrayList<>();
+        Double total = 0.0;
         //create reservations
         List<ReservationCreateData> reservationCreateDataList = orderCreateData.getReservations();
         for(ReservationCreateData reservationCreateData : reservationCreateDataList){
@@ -94,8 +95,12 @@ public class OrderService {
             reservationEntity.setQuantity(reservationCreateData.getQuantity());
             reservationEntity.setPrice(productEntity.getPrice());
             InventoryReservationEntity savedReservationEntity = this.reservationRepository.save(reservationEntity);
-            savedOrderEntity.getReservations().add(savedReservationEntity);
+            total += (productEntity.getPrice() * reservationCreateData.getQuantity());
+            reservations.add(savedReservationEntity);
         }
+        savedOrderEntity.setTotal(total);
+        this.orderRepository.save(savedOrderEntity);
+        savedOrderEntity.setReservations(reservations);
 
         OrderData orderData = this.orderMapper.toDto(savedOrderEntity);
         return orderData;

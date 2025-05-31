@@ -29,6 +29,9 @@ public class OrderEntity extends TimeEntity{
     @Column(name = "status")
     private ReservationStatus status;
 
+    @Column(name = "total")
+    private Double total;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     @JsonManagedReference
     private List<InventoryReservationEntity> reservations;

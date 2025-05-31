@@ -11,6 +11,7 @@ public class OrderData {
 
     private Long orderId;
     private ReservationStatus status;
+    private Double total;
     private List<ReservationData> reservations;
 
 }
