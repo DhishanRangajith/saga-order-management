@@ -1,22 +1,19 @@
 package com.dra.order_service.mapper;
 
 import java.util.List;
-import org.mapstruct.Mapper;
-import com.dra.order_service.dto.OrderData;
-import com.dra.order_service.dto.ProductData;
-import com.dra.order_service.entity.OrderEntity;
-import com.dra.order_service.entity.ProductEntity;
 
-@Mapper(componentModel = "spring")
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import com.dra.order_service.dto.response.OrderData;
+import com.dra.order_service.entity.OrderEntity;
+
+@Mapper(componentModel = "spring", uses = {OrderProductMapper.class})
 public interface OrderMapper {
 
-    OrderEntity orderDataToOrderEntity(OrderData orderData);
-    OrderData orderEntityToOrderData(OrderEntity orderEntity);
+    @Mapping(target = "products", source = "orderProducts")
+    OrderData toOrderData(OrderEntity orderEntity);
 
-    ProductEntity productDataToProductEntity(ProductData productData);
-    ProductData productEntityToProductData(ProductEntity productEntity);
-    
-    List<OrderEntity> orderDataListToOrderEntityList(List<OrderData> orderData);
-    List<OrderData> orderEntityListToOrderDataList(List<OrderEntity> orderEntity);
+    @Mapping(target = "products", source = "orderProducts")
+    List<OrderData> toOrderDataList(List<OrderEntity> orderEntityList);
 
 }

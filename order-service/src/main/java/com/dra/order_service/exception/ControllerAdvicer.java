@@ -55,4 +55,10 @@ public class ControllerAdvicer {
         return new ResponseEntity<>(new ErrorResponse(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    //Handle Bad exceptions
+    @ExceptionHandler(BadException.class)
+    public ResponseEntity<?> handleBadException(BadException exception){
+        return new ResponseEntity<>(new ErrorResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }

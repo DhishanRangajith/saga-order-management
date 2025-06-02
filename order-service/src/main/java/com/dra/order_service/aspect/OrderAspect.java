@@ -5,7 +5,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
-import com.dra.order_service.dto.OrderData;
+import com.dra.order_service.dto.response.OrderData;
 
 @Aspect
 @Component
