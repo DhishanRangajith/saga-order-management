@@ -1,17 +1,17 @@
-package com.dra.inventory_service.dto;
+package com.dra.inventory_service.dto.response;
 
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class InventoryReservationData {
+@Setter
+public class InventoryData {
 
-    private Long orderId;
+    private Long id;
     private ProductData product;
     private Double quantity;
-    private Double price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

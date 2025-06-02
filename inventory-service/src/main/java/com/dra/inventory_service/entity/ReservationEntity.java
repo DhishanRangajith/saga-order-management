@@ -16,10 +16,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "reservations")
 @Getter
 @Setter
-public class OrderEntity extends TimeEntity{
+public class ReservationEntity extends TimeEntity{
 
     @Id
     @Column(name = "order_id", nullable = false)
@@ -32,7 +32,7 @@ public class OrderEntity extends TimeEntity{
     @Column(name = "total")
     private Double total;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reservation")
     @JsonManagedReference
     private List<InventoryReservationEntity> reservations;
 }

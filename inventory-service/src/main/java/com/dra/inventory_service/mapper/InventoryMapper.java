@@ -5,7 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.dra.inventory_service.dto.InventoryData;
+import com.dra.inventory_service.dto.response.InventoryData;
 import com.dra.inventory_service.entity.InventoryEntity;
 
 @Mapper(componentModel = "spring")

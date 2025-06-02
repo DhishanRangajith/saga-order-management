@@ -1,4 +1,4 @@
-package com.dra.inventory_service.dto;
+package com.dra.inventory_service.dto.response;
 
 import java.time.LocalDateTime;
 import com.dra.inventory_service.enums.ProductStatus;

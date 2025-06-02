@@ -26,7 +26,7 @@ public class InventoryReservationEntity extends TimeEntity{
     @JoinColumn(name = "order_id")
     @MapsId("orderId")
     @JsonBackReference
-    private OrderEntity order;
+    private ReservationEntity reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

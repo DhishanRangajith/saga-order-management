@@ -14,39 +14,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.dra.inventory_service.dto.request.CancelReservationData;
-import com.dra.inventory_service.dto.request.OrderCreateData;
-import com.dra.inventory_service.dto.request.OrderSearchData;
-import com.dra.inventory_service.dto.response.OrderData;
-import com.dra.inventory_service.service.OrderService;
+import com.dra.inventory_service.dto.request.ReservationCreateData;
+import com.dra.inventory_service.dto.request.ReservationSearchData;
+import com.dra.inventory_service.dto.response.ReservationData;
+import com.dra.inventory_service.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/v1/orders")
+@RequestMapping("api/v1/reservations")
 @RequiredArgsConstructor
 @Validated
-public class OrderContoller {
+public class ReservationContoller {
 
     @Value("${spring.appData.pageMaxSize}")
     private int pageMaxSize;
 
-    private final OrderService orderService;
+    private final ReservationService reservationService;
 
-    @GetMapping("{orderId}")
-    public ResponseEntity<OrderData> getOrder(@PathVariable Long orderId){
-        OrderData orderData = this.orderService.getOrder(orderId);
-        return ResponseEntity.ok().body(orderData);
+    @GetMapping("orders/{orderId}")
+    public ResponseEntity<ReservationData> getReservation(@PathVariable Long orderId){
+        ReservationData reservationData = this.reservationService.getReservationByOrderId(orderId);
+        return ResponseEntity.ok().body(reservationData);
     }
 
     @GetMapping
-    public ResponseEntity<Page<OrderData>> searchOrders(
+    public ResponseEntity<Page<ReservationData>> searchReservations(
         @RequestParam(required = false) Long orderId,
         @RequestParam(required = false) String productCode,
         @RequestParam(required = false) String status,
         @RequestParam(required = false) Integer page,
         @RequestParam(required = false) Integer pageSize
     ){
-        OrderSearchData orderSearchData = OrderSearchData.builder()
+        ReservationSearchData reservationSearchData = ReservationSearchData.builder()
                                                         .orderId(orderId)
                                                         .productCode(productCode)
                                                         .status(status)
@@ -54,20 +54,20 @@ public class OrderContoller {
                                                         .pageSize(pageSize==null?pageMaxSize:pageSize)
                                                         .build();
 
-        Page<OrderData> pagedData = this.orderService.getOrdersList(orderSearchData);
+        Page<ReservationData> pagedData = this.reservationService.searchReservations(reservationSearchData);
         return ResponseEntity.ok().body(pagedData);
     }
 
     @PostMapping
-    public ResponseEntity<OrderData> createOrder(@RequestBody @Valid OrderCreateData orderCreateData){
-        OrderData orderData = this.orderService.createOrder(orderCreateData);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderData);
+    public ResponseEntity<ReservationData> createReservation(@RequestBody @Valid ReservationCreateData reservationCreateData){
+        ReservationData reservationData = this.reservationService.createReservation(reservationCreateData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationData);
     }
 
-    @PatchMapping("{orderId}/cancel")
-    public ResponseEntity<OrderData> cancelOrder(@RequestBody CancelReservationData cancelReservationData){
-        OrderData orderData = this.orderService.cancelOrder(cancelReservationData);
-        return ResponseEntity.ok().body(orderData);
+    @PatchMapping("orders/{orderId}/cancel")
+    public ResponseEntity<ReservationData> cancelReservation(@PathVariable Long orderId, @RequestBody CancelReservationData cancelReservationData){
+        ReservationData reservationData = this.reservationService.cancelReservation(orderId, cancelReservationData);
+        return ResponseEntity.ok().body(reservationData);
     }
 
 }

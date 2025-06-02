@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class OrderSearchData {
+public class ReservationSearchData {
 
     private Long orderId;
     private String productCode;

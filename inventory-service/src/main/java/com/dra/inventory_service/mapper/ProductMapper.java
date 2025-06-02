@@ -6,8 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import com.dra.inventory_service.dto.ProductData;
+
 import com.dra.inventory_service.dto.request.CreateProductData;
+import com.dra.inventory_service.dto.response.ProductData;
 import com.dra.inventory_service.entity.ProductEntity;
 
 @Mapper(componentModel = "spring")

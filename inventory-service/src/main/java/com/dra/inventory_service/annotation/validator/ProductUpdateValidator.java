@@ -1,7 +1,7 @@
 package com.dra.inventory_service.annotation.validator;
 
 import com.dra.inventory_service.annotation.ProductUpdateValid;
-import com.dra.inventory_service.dto.ProductData;
+import com.dra.inventory_service.dto.response.ProductData;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

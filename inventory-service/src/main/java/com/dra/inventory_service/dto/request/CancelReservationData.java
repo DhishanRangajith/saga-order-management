@@ -1,5 +1,6 @@
 package com.dra.inventory_service.dto.request;
 
+import com.dra.inventory_service.enums.ReservationStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class CancelReservationData {
 
-    @NotNull(message = "Order is required.")
-    private Long orderId;
+    @NotNull(message = "Status is invalid.")
+    private ReservationStatus status;
 }
