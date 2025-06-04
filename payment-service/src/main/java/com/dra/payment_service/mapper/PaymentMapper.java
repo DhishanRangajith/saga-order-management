@@ -1,10 +1,9 @@
 package com.dra.payment_service.mapper;
 
 import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
+import com.dra.payment_service.dto.event.consumer.ReservationSuccessEventData;
 import com.dra.payment_service.dto.request.PaymentCreateData;
 import com.dra.payment_service.dto.response.PaymentData;
 import com.dra.payment_service.entity.PaymentEntity;
@@ -20,5 +19,7 @@ public interface PaymentMapper {
 
     PaymentData toDto(PaymentEntity paymentEntity);
     List<PaymentData> toDtoList(List<PaymentEntity> paymentEntityList);
+
+    PaymentCreateData toPaymentCreateData(ReservationSuccessEventData reservationEventData);
 
 }

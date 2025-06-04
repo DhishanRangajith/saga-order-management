@@ -1,27 +1,27 @@
-package com.dra.order_service.config.property;
+package com.dra.payment_service.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @ConfigurationProperties(prefix = "app.topic.consumer")
 @Getter
 @Setter
-public class ConsumerTopicProperties {
+public class KafkaConsumerTopicProperty {
+
+    private Order order;
     private Inventory inventory;
-    private Payment payment;
+
+    @Getter
+    @Setter
+    public static class Order {
+        private String orderCancel;
+    }
 
     @Getter
     @Setter
     public static class Inventory {
-        String orderStatusUpdate;
+        private String reservationSuccess;
     }
 
-    @Getter
-    @Setter
-    public static class Payment {
-        String statusUpdate;
-        String failCancel;
-    }
 }

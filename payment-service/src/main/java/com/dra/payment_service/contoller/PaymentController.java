@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PaymentController {
 
-    @Value("${spring.appData.pageMaxSize}")
+    @Value("${app.pageMaxSize}")
     private int maxPageSize;
 
     private final PaymentService paymentService;

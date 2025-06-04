@@ -1,11 +1,11 @@
-package com.dra.order_service.dto.publisherEvent;
+package com.dra.inventory_service.dto.event.consumer;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderCancelEvent {
+public class PaymentFailRefundEventData {
 
     private Long orderId;
     private String reason;

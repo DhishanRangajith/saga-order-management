@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class InventoryController {
 
-    @Value("${spring.appData.pageMaxSize}")
+    @Value("${app.pageMaxSize}")
     private int pageMaxSize;
 
     private final InventoryService inventoryService;

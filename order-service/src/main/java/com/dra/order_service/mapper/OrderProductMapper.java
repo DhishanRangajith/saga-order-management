@@ -5,7 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.dra.order_service.dto.publisherEvent.ProductDataEvent;
+import com.dra.order_service.dto.publisherEvent.ProductDataEventData;
 import com.dra.order_service.dto.response.ProductData;
 import com.dra.order_service.entity.OrderProductEntity;
 
@@ -19,8 +19,8 @@ public interface OrderProductMapper {
     List<ProductData> toProductDataList(List<OrderProductEntity> orderProductEntity);
 
     @Mapping(target = "productCode", source = "orderProductId.productCode")
-    ProductDataEvent toProductDataEvent(OrderProductEntity orderProductEntity);
+    ProductDataEventData toProductDataEvent(OrderProductEntity orderProductEntity);
 
-    List<ProductDataEvent> toProductDataEventList(List<OrderProductEntity> orderProductEntityList);
+    List<ProductDataEventData> toProductDataEventList(List<OrderProductEntity> orderProductEntityList);
 
 }

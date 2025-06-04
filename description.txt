@@ -1,0 +1,28 @@
+
+
+3) payment-service
+ get payment - GET /api/payments/{id}
+ get payments - GET /api/payments
+ create  - post  post/api/v1/payments    -> {orderId, amount }
+ update status - patch /api/v1/payments/{id}  -> {status : 'SUCCESS'/'FAIL'/'CANCELL'}
+
+ Consumes: inventory-events
+ Emits: payment-events
+
+--------------------------------------------------------------------------------------------------
+CREATE TABLE payments (
+    id UUID PRIMARY KEY,
+    order_id UUID NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(20) NOT NULL,  -- e.g., PENDING, SUCCESS, FAILED, CANCELL
+    created_at, updated_at
+);
+
+
+🔁 Kafka Topics Summary
+Topic Name	    Produced By	          Consumed By	                    Event Types
+order-events	    OrderService	   InventoryService	            OrderCreatedEvent, OrderCancelledEvent
+inventory-events    InventoryService	   PaymentService, OrderService	    InventoryReservedEvent, InventoryFailedEvent
+payment-events	    PaymentService	   OrderService, InventoryService   PaymentSuccessEvent, PaymentFailedEvent
+
+

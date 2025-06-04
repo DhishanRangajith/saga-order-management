@@ -3,6 +3,9 @@ package com.dra.inventory_service.mapper;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import com.dra.inventory_service.dto.event.consumer.ProductDataEventData;
+import com.dra.inventory_service.dto.request.InventoryReservationCreateData;
 import com.dra.inventory_service.dto.response.InventoryReservationData;
 import com.dra.inventory_service.entity.InventoryReservationEntity;
 
@@ -22,5 +25,8 @@ public interface InventoryReservationMapper {
 
     List<InventoryReservationEntity> entityListTodtoList(List<InventoryReservationData> dtoList);
 
+    InventoryReservationCreateData toInventoryReservationCreateData(ProductDataEventData ProductDataEventData);
+    List<InventoryReservationCreateData> toInventoryReservationCreateDataList(List<ProductDataEventData> ProductDataEventData);
+    
 
 }

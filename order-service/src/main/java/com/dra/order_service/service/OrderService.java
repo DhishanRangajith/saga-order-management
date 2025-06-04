@@ -13,9 +13,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import com.dra.order_service.config.property.ProducerTopicProperties;
 import com.dra.order_service.dto.EventWrapper;
-import com.dra.order_service.dto.consumerEvent.OrderStatusUpdateEvent;
-import com.dra.order_service.dto.publisherEvent.OrderCancelEvent;
-import com.dra.order_service.dto.publisherEvent.OrderCreateEvent;
+import com.dra.order_service.dto.consumerEvent.OrderStatusUpdateEventData;
+import com.dra.order_service.dto.publisherEvent.OrderCancelEventData;
+import com.dra.order_service.dto.publisherEvent.OrderCreateEventData;
 import com.dra.order_service.dto.request.OrderCreateData;
 import com.dra.order_service.dto.request.OrderSearchData;
 import com.dra.order_service.dto.request.ProductCreateData;
@@ -40,8 +40,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
     private final OrderMapper orderMapper;
-    private final ProducerTopicProperties producerTopicProperties;
-    private final KafkaTemplate<String, EventWrapper> kafkaTemplate;
+    private final KafkaEventProcessor kafkaEventProcessor;
 
     public OrderEntity getOrderEntity(Long id){
         OrderEntity orderEntity = this.orderRepository.findById(id)
@@ -94,8 +93,8 @@ public class OrderService {
         orderEntity.setAmount(amount);
         savedOrderEntity = this.orderRepository.save(orderEntity);
         OrderData orderData = this.orderMapper.toOrderData(savedOrderEntity);
-        OrderCreateEvent orderCreateEvent = this.orderMapper.toOrderCreateEvent(savedOrderEntity);
-        this.publishOrderCreatedEvent(orderCreateEvent);
+        OrderCreateEventData orderCreateEventData = this.orderMapper.toOrderCreateEvent(savedOrderEntity);
+        this.kafkaEventProcessor.publishOrderCreatedEvent(orderCreateEventData);
         return orderData;
     }
 
@@ -114,8 +113,8 @@ public class OrderService {
               
         orderEntity.setStatus(OrderStatus.CANCELLED);
         this.orderRepository.save(orderEntity);
-        OrderCancelEvent orderCancelEvent = this.orderMapper.tOrderCancelEvent(orderEntity);
-        this.publishOrderCancelledEvent(orderCancelEvent);
+        OrderCancelEventData orderCancelEvent = this.orderMapper.tOrderCancelEvent(orderEntity);
+        this.kafkaEventProcessor.publishOrderCancelledEvent(orderCancelEvent);
         return true;
     }
 
@@ -149,22 +148,5 @@ public class OrderService {
         }
         return true;
     }
-
-    public void publishOrderCreatedEvent(OrderCreateEvent orderCreateEvent){
-        EventWrapper eventWrapper = new EventWrapper(this.producerTopicProperties.getOrder().getCreate(), orderCreateEvent);
-        this.kafkaTemplate.send(this.producerTopicProperties.getOrder().getCreate(), eventWrapper);
-    }
-
-    public void publishOrderCancelledEvent(OrderCancelEvent orderCancelEvent){
-        EventWrapper eventWrapper = new EventWrapper(this.producerTopicProperties.getOrder().getCancel(), orderCancelEvent);
-        this.kafkaTemplate.send(this.producerTopicProperties.getOrder().getCancel(), eventWrapper);
-    }
-
-    @KafkaListener(topics="${app.topic.consumer.order.status_update}", groupId = "test")
-    public void subscribeOrderStatusUpdate(OrderStatusUpdateEvent orderStatusUpdateEvent){
-        OrderStatus orderStatus = OrderStatus.valueOf(orderStatusUpdateEvent.getStatus());
-        this.changeStatus(orderStatusUpdateEvent.getOrderId(), orderStatus);
-    }
-
 
 }

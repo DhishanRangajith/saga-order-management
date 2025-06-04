@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.dra.inventory_service.dto.event.publisher.OrderStatusUpdateEventData;
+import com.dra.inventory_service.dto.event.publisher.ReservationEventData;
 import com.dra.inventory_service.dto.request.CancelReservationData;
 import com.dra.inventory_service.dto.request.ReservationCreateData;
 import com.dra.inventory_service.dto.request.ReservationSearchData;
@@ -39,6 +41,7 @@ public class ReservationService {
     private final ProductService productService;
     private final InventoryService inventoryService;
     private final ReservationMapper reservationMapper;
+    private final KafkaEventProcessor kafkaEventProcessor;
 
     public ReservationEntity getReservationEntityByOrderId(Long orderId){
         return this.reservationRepository.findByOrderId(orderId)
@@ -107,6 +110,10 @@ public class ReservationService {
         this.reservationRepository.save(savedReservationEntity);
         savedReservationEntity.setReservations(reservations);
 
+        //Publish event
+        ReservationEventData reservationEventData = this.reservationMapper.toReservationEventData(savedReservationEntity);
+        this.kafkaEventProcessor.publishReservationSuccessEvent(reservationEventData);
+
         ReservationData reservationData = this.reservationMapper.toDto(savedReservationEntity);
         return reservationData;
     }
@@ -114,6 +121,9 @@ public class ReservationService {
     public ReservationData cancelReservation(Long orderId, @Valid CancelReservationData cancelReservationData){
         ReservationEntity entity = this.restoreReservationItems(orderId, cancelReservationData.getStatus());
         ReservationData reservationData = this.reservationMapper.toDto(entity);
+        // publish event
+        OrderStatusUpdateEventData orderStatusUpdateEventData = new OrderStatusUpdateEventData(orderId, null);
+        this.kafkaEventProcessor.publishInventoryReleaseEvent(orderStatusUpdateEventData);
         return reservationData;
     }
 

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class ProductController {
 
-    @Value("${spring.appData.pageMaxSize}")
+    @Value("${app.pageMaxSize}")
     private int pageMaxSize;
 
     private final ProductService productService;

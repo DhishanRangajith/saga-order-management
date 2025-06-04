@@ -1,0 +1,11 @@
+package com.dra.inventory_service.entity;
+
+public enum OrderStatus {
+    PROCESSING,
+    INVALID_DATA,
+    INVENTORY_UNAVAILABLE,
+    INVENTORY_RESERVED_PENDING_PAYMENT,
+    INVENTORY_RESERVED_PAYMENT_COMPLETED,
+    CANCELLED,
+    CLOSED_DELIVERED
+}

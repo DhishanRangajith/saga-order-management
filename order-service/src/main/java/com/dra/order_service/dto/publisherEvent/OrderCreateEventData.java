@@ -6,9 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderCreateEvent {
+public class OrderCreateEventData {
 
     private Long orderId;
-    private List<ProductDataEvent> products;
+    private List<ProductDataEventData> products;
 
 }

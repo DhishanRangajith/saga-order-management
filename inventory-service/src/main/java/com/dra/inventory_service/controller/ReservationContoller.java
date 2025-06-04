@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class ReservationContoller {
 
-    @Value("${spring.appData.pageMaxSize}")
+    @Value("${app.pageMaxSize}")
     private int pageMaxSize;
 
     private final ReservationService reservationService;
