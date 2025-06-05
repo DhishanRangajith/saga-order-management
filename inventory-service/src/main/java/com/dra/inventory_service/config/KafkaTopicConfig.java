@@ -3,8 +3,13 @@ package com.dra.inventory_service.config;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.TopicBuilder;
+import org.springframework.kafka.core.ConsumerFactory;
+
 import com.dra.inventory_service.config.property.KafkaProduceTopicProperty;
+import com.dra.inventory_service.dto.event.EventWrapper;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration

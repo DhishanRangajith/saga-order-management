@@ -145,7 +145,85 @@ mvn spring-boot:run
 
 cd ../payment-service
 mvn spring-boot:run
+```
 
 4. Use tools like Postman or Swagger to test the APIs.
+
+## Tested scenarios 
+
+1. Create Order with Available Inventory and Successful Payment
+   - Expected: Order Confirmed
+
+2. Create Order with Insufficient Inventory
+   - Expected: Order Failed
+
+3. Create Order with Non-existent Product
+   - Expected: Order Failed
+
+4. Create Order with Inventory Available but Payment Fails
+   - Expected: Order Cancelled, Inventory Released
+
+5. Payment Timeout After Inventory Reserved
+   - Expected: Order Cancelled, Inventory Released
+
+6. Cancel Order Before Payment
+   - Expected: Inventory Released, No Payment Triggered
+
+7. Cancel Order After Payment
+   - Expected: Payment Refunded, Inventory Released, Order Cancelled Confirmed
+
+8. Force Payment Refund for an Existing Paid Order
+   - Expected: Refund Processed, Order Updated
+
+9. Fetch Order Status After Saga Completion
+   - Expected: Correct Final Status (CONFIRMED / CANCELLED / FAILED)
+
+10. Search Orders by User ID
+    - Expected: Correct List Returned
+
+11. Retry Payment After Temporary Failure
+    - Expected: Order Confirmed if Payment Succeeds
+
+12. Retry Inventory Reservation After Initial Failure
+    - Expected: Order Confirmed if Retry Succeeds
+
+13. Create Order with Quantity Greater than Available Stock
+    - Expected: Order Failed Immediately
+
+14. Create Multiple Orders Simultaneously (Concurrency Test)
+    - Expected: Only Available Inventory Is Allocated, Rest Fail
+
+15. Simulate Event Delivery Delay Between Services
+    - Expected: Eventual Consistency Maintained
+
+16. Inventory Reserved but Order Cancelled Before Payment
+    - Expected: Inventory Released Successfully
+
+17. Payment Service Down During Order Flow
+    - Expected: Saga Aborted, Order Cancelled, Inventory Released
+
+18. Inventory Service Down During Order Flow
+    - Expected: Saga Aborted, Order Failed
+
+19. Simulate Kafka Message Loss
+    - Expected: Saga Timeout or Compensating Transaction Triggered
+
+20. Simulate Duplicate Events (Idempotency Test)
+    - Expected: System Handles Gracefully, No Duplicates
+
+21. Payment Success Event Received Twice
+    - Expected: Order Still Confirmed Once, No Duplicate Records
+
+22. Inventory Reserved Event Received Late
+    - Expected: Saga Still Proceeds if Not Timed Out
+
+23. Invalid Order Data (e.g., negative quantity)
+    - Expected: Validation Failure, No Saga Triggered
+
+24. Cancel Non-Existing Order
+    - Expected: Proper Error Response
+
+25. Try to Cancel Already Cancelled Order
+    - Expected: No Side Effects, Idempotent Response
 
 

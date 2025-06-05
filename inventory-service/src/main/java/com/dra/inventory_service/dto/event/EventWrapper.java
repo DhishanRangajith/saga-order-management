@@ -1,11 +1,16 @@
 package com.dra.inventory_service.dto.event;
 
 import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class EventWrapper {
     private String eventType;
     private Object data;
