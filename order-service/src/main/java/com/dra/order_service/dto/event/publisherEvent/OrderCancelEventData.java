@@ -1,4 +1,4 @@
-package com.dra.order_service.dto.publisherEvent;
+package com.dra.order_service.dto.event.publisherEvent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +8,5 @@ import lombok.Setter;
 public class OrderCancelEventData {
 
     private Long orderId;
-    private String reason;
 
 }

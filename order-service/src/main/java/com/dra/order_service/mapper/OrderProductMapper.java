@@ -5,7 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.dra.order_service.dto.publisherEvent.ProductDataEventData;
+import com.dra.order_service.dto.event.publisherEvent.ProductDataEventData;
 import com.dra.order_service.dto.response.ProductData;
 import com.dra.order_service.entity.OrderProductEntity;
 

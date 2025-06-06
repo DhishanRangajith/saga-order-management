@@ -4,9 +4,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.dra.order_service.config.property.ProducerTopicProperties;
-import com.dra.order_service.dto.EventWrapper;
-import com.dra.order_service.dto.publisherEvent.OrderCancelEventData;
-import com.dra.order_service.dto.publisherEvent.OrderCreateEventData;
+import com.dra.order_service.dto.event.EventWrapper;
+import com.dra.order_service.dto.event.publisherEvent.OrderCancelEventData;
+import com.dra.order_service.dto.event.publisherEvent.OrderCreateEventData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,13 +18,15 @@ public class KafkaEventProcessor {
     private final KafkaTemplate<String, EventWrapper> kafkaTemplate;
 
     public void publishOrderCreatedEvent(OrderCreateEventData orderCreateEvent){
-        EventWrapper eventWrapper = new EventWrapper(this.producerTopicProperties.getOrder().getCreate(), orderCreateEvent);
-        this.kafkaTemplate.send(this.producerTopicProperties.getOrder().getCreate(), eventWrapper);
+        String topic = this.producerTopicProperties.getCreationRequest();
+        EventWrapper eventWrapper = new EventWrapper(topic, orderCreateEvent);
+        this.kafkaTemplate.send(topic, eventWrapper);
     }
 
     public void publishOrderCancelledEvent(OrderCancelEventData orderCancelEvent){
-        EventWrapper eventWrapper = new EventWrapper(this.producerTopicProperties.getOrder().getCancel(), orderCancelEvent);
-        this.kafkaTemplate.send(this.producerTopicProperties.getOrder().getCancel(), eventWrapper);
+        String topic = this.producerTopicProperties.getCancellationRequest();
+        EventWrapper eventWrapper = new EventWrapper(topic, orderCancelEvent);
+        this.kafkaTemplate.send(topic, eventWrapper);
     }
 
 }

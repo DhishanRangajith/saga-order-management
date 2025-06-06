@@ -26,6 +26,9 @@ public class OrderEntity extends CommonEntity{
     @Column(name = "status")
     private OrderStatus status;
 
+    @Column(name = "sub_status", length = 50)
+    private String subStatus;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     @JsonManagedReference
     private List<OrderProductEntity> orderProducts;

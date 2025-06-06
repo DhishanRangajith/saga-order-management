@@ -15,13 +15,13 @@ public class KafkaConsumerTopicProperty {
     @Getter
     @Setter
     public static class Order {
-        private String orderCancel;
+        private String cancellationRequest;
     }
 
     @Getter
     @Setter
     public static class Inventory {
-        private String reservationSuccess;
+        private String reservationCreated;
     }
 
 }

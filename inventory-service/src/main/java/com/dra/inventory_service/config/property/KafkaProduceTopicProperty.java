@@ -9,8 +9,11 @@ import lombok.Setter;
 @Setter
 public class KafkaProduceTopicProperty {
 
-    private String orderStatusUpdate;
-    private String reserved;
-    private String stockRelease;
+    private String reservationCreated;
+    private String orderStatusChanged;
+    private String orderCreationSuccess;
+    private String orderCreationFailed;
+    private String orderCancellationSuccess;
+    private String orderCancellationFailed;
 
 }

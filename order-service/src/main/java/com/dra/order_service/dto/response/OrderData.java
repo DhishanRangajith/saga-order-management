@@ -12,6 +12,7 @@ public class OrderData {
 
     private Long id;
     private OrderStatus status;
+    private String subStatus;
     private Double amount;
     private List<ProductData> products;
     private LocalDateTime createdAt;

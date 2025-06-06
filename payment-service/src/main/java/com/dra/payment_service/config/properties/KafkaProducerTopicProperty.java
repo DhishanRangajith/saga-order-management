@@ -11,5 +11,5 @@ import lombok.Setter;
 public class KafkaProducerTopicProperty {
     private String paymentSuccess;
     private String paymentFailed;
-    private String paymentRefund;
+    private String paymentCancelled;
 }

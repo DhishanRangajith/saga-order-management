@@ -10,8 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import com.dra.payment_service.dto.event.publisher.PaymentFailRefundEventData;
-import com.dra.payment_service.dto.event.publisher.PaymentSuccessEventData;
+import com.dra.payment_service.dto.event.publisher.PaymentEventData;
 import com.dra.payment_service.dto.request.PaymentCreateData;
 import com.dra.payment_service.dto.request.PaymentSearchData;
 import com.dra.payment_service.dto.request.PaymentUpdateData;
@@ -70,7 +69,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentData updatePaymentStatus(Long orderId, @Valid PaymentUpdateData paymentUpdateData){
+    public PaymentData updatePaymentStatus(Long orderId, @Valid PaymentUpdateData paymentUpdateData, boolean event){
         PaymentEntity paymentEntity = this.getPaymentEntityByOrderId(orderId);
         boolean valid = false;
         switch (paymentEntity.getStatus()) {
@@ -78,37 +77,43 @@ public class PaymentService {
                 valid = List.of(
                     PaymentStatus.CANCELLED_ORDER_CANCELLED, 
                     PaymentStatus.COMPLETED,
-                    PaymentStatus.FAILED_RETRY_POSSIBLE
+                    PaymentStatus.FAILED
                 ).contains(paymentUpdateData.getStatus());
                 break;
-            case FAILED_RETRY_POSSIBLE:
+            case COMPLETED:
                 valid = List.of(
-                    PaymentStatus.CANCELLED_ORDER_CANCELLED, 
-                    PaymentStatus.COMPLETED
+                    PaymentStatus.CANCELLED_ORDER_CANCELLED, PaymentStatus.CANCELLED_ORDER_CANCELLED_REFUND
                 ).contains(paymentUpdateData.getStatus());
+                if(valid) paymentUpdateData.setStatus(PaymentStatus.CANCELLED_ORDER_CANCELLED_REFUND);
             default:
                 break;
         }
 
-        if(!valid) 
-            throw new BadException("Invalid status transition. Cannot update payment status to '" + paymentUpdateData.getStatus().name() + "'.");
+        if(!valid){
+            if(!event) throw new BadException("Invalid status transition. Cannot update payment status to '" + paymentUpdateData.getStatus().name() + "'.");
+            else return null;
+        }
 
         paymentEntity.setStatus(paymentUpdateData.getStatus());
         PaymentEntity savedPaymentEntity = this.paymentRepository.save(paymentEntity);
         PaymentData paymentData = this.paymentMapper.toDto(savedPaymentEntity);
 
-        //success payment
-        if(paymentUpdateData.getStatus().equals(PaymentStatus.COMPLETED)){
-            this.kafkaEventProcessor.publishPaymentSuccessEvent(new PaymentSuccessEventData(orderId));
+
+        //publish event
+        switch (savedPaymentEntity.getStatus()) {
+            case COMPLETED:
+                this.kafkaEventProcessor.publishPaymentSuccessEvent(new PaymentEventData(orderId));
+                break;
+            case CANCELLED_ORDER_CANCELLED: 
+                this.kafkaEventProcessor.publishPaymentCancelledEvent(new PaymentEventData(orderId));
+                break;
+            case FAILED: 
+                this.kafkaEventProcessor.publishPaymentFailedEvent(new PaymentEventData(orderId));
+                break;
+            default:
+                break;
         }
-        //cancel payment
-        if(paymentUpdateData.getStatus().equals(PaymentStatus.CANCELLED_ORDER_CANCELLED)){
-            this.kafkaEventProcessor.publishPaymentRefundedEvent(new PaymentFailRefundEventData(orderId, null));
-        }
-        //fail payment
-        if(paymentUpdateData.getStatus().equals(PaymentStatus.FAILED_RETRY_POSSIBLE)){
-            this.kafkaEventProcessor.publishPaymentFailedEvent(new PaymentFailRefundEventData(orderId, null));
-        }
+        
         return paymentData;
     }
 

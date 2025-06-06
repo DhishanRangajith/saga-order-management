@@ -4,8 +4,8 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.dra.order_service.dto.publisherEvent.OrderCancelEventData;
-import com.dra.order_service.dto.publisherEvent.OrderCreateEventData;
+import com.dra.order_service.dto.event.publisherEvent.OrderCancelEventData;
+import com.dra.order_service.dto.event.publisherEvent.OrderCreateEventData;
 import com.dra.order_service.dto.response.OrderData;
 import com.dra.order_service.entity.OrderEntity;
 
@@ -22,8 +22,7 @@ public interface OrderMapper {
     OrderCreateEventData toOrderCreateEvent(OrderEntity orderEntity);
 
     @Mapping(target = "orderId", source = "id")
-    @Mapping(target = "reason", ignore = true)
-    OrderCancelEventData tOrderCancelEvent(OrderEntity orderEntity);
+    OrderCancelEventData toOrderCancelEvent(OrderEntity orderEntity);
 
     List<OrderCreateEventData> toOrderCreateEventList(List<OrderEntity> orderEntity);
 

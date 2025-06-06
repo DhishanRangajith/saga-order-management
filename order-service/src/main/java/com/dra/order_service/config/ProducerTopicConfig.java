@@ -4,9 +4,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
-
 import com.dra.order_service.config.property.ProducerTopicProperties;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -17,7 +15,7 @@ public class ProducerTopicConfig {
 
     @Bean
     public NewTopic createOrderTopic(){
-        return TopicBuilder.name(this.producerTopicProperties.getOrder().getCreate())
+        return TopicBuilder.name(this.producerTopicProperties.getCreationRequest())
                             // .partitions(1)
                             // .replicas(1)
                             .build();
@@ -25,7 +23,7 @@ public class ProducerTopicConfig {
 
     @Bean
     public NewTopic cancelOrderTopic(){
-        return TopicBuilder.name(this.producerTopicProperties.getOrder().getCancel()).build();
+        return TopicBuilder.name(this.producerTopicProperties.getCancellationRequest()).build();
     }
 
 }

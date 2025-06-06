@@ -1,11 +1,13 @@
-package com.dra.order_service.dto;
+package com.dra.order_service.dto.event;
 
 import java.time.Instant;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class EventWrapper {
     private String eventType;
     private Object data;

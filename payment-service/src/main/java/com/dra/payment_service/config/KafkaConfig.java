@@ -25,7 +25,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic newPaymentRefundTopic(){
-        return TopicBuilder.name(this.kafkaProducerTopicProperty.getPaymentRefund()).build();
+        return TopicBuilder.name(this.kafkaProducerTopicProperty.getPaymentCancelled()).build();
     }
 
 }

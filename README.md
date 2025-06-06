@@ -163,9 +163,6 @@ mvn spring-boot:run
 4. Create Order with Inventory Available but Payment Fails
    - Expected: Order Cancelled, Inventory Released
 
-5. Payment Timeout After Inventory Reserved
-   - Expected: Order Cancelled, Inventory Released
-
 6. Cancel Order Before Payment
    - Expected: Inventory Released, No Payment Triggered
 
@@ -176,16 +173,16 @@ mvn spring-boot:run
    - Expected: Refund Processed, Order Updated
 
 9. Fetch Order Status After Saga Completion
-   - Expected: Correct Final Status (CONFIRMED / CANCELLED / FAILED)
+   - Expected: Correct Final Status (CREATION_FAILED / CREATION_SUCCESS / CANCELLATION_SUCCESS)
 
-10. Search Orders by User ID
+10. Search Orders by orderId, productCode, ...
     - Expected: Correct List Returned
 
 11. Retry Payment After Temporary Failure
-    - Expected: Order Confirmed if Payment Succeeds
+    - Expected: Order Creation success if Payment Succeeds
 
 12. Retry Inventory Reservation After Initial Failure
-    - Expected: Order Confirmed if Retry Succeeds
+    - Expected: Order Creation Success if Retry Succeeds
 
 13. Create Order with Quantity Greater than Available Stock
     - Expected: Order Failed Immediately
@@ -200,10 +197,10 @@ mvn spring-boot:run
     - Expected: Inventory Released Successfully
 
 17. Payment Service Down During Order Flow
-    - Expected: Saga Aborted, Order Cancelled, Inventory Released
+    - Expected: Saga Aborted, Order is processing state, Inventory Released
 
 18. Inventory Service Down During Order Flow
-    - Expected: Saga Aborted, Order Failed
+    - Expected: Saga Aborted, Order is processing state
 
 19. Simulate Kafka Message Loss
     - Expected: Saga Timeout or Compensating Transaction Triggered
@@ -212,18 +209,18 @@ mvn spring-boot:run
     - Expected: System Handles Gracefully, No Duplicates
 
 21. Payment Success Event Received Twice
-    - Expected: Order Still Confirmed Once, No Duplicate Records
+    - Expected: No Duplicate Records, return an error message to 2nd
 
 22. Inventory Reserved Event Received Late
     - Expected: Saga Still Proceeds if Not Timed Out
 
 23. Invalid Order Data (e.g., negative quantity)
-    - Expected: Validation Failure, No Saga Triggered
+    - Expected: Validation Failure, No Saga Triggered, Order creation failed
 
 24. Cancel Non-Existing Order
-    - Expected: Proper Error Response
+    - Expected: Validation Failure, No Saga Triggered, Order creation failed
 
 25. Try to Cancel Already Cancelled Order
-    - Expected: No Side Effects, Idempotent Response
+    - Expected: Return validation failure response
 
 

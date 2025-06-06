@@ -10,11 +10,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.dra.inventory_service.dto.event.publisher.OrderStatusUpdateEventData;
+import com.dra.inventory_service.dto.event.publisher.OrderEventData;
 import com.dra.inventory_service.dto.event.publisher.ReservationEventData;
-import com.dra.inventory_service.dto.request.CancelReservationData;
 import com.dra.inventory_service.dto.request.ReservationCreateData;
 import com.dra.inventory_service.dto.request.ReservationSearchData;
+import com.dra.inventory_service.dto.request.ReservationStatusUpdateData;
 import com.dra.inventory_service.dto.request.ProductQuantData;
 import com.dra.inventory_service.dto.request.InventoryReservationCreateData;
 import com.dra.inventory_service.dto.response.ReservationData;
@@ -29,7 +29,6 @@ import com.dra.inventory_service.mapper.ReservationMapper;
 import com.dra.inventory_service.repository.InventoryReservationRepository;
 import com.dra.inventory_service.repository.ReservationRepository;
 import com.dra.inventory_service.repository.specification.ReservationSpecification;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -71,7 +70,8 @@ public class ReservationService {
     @Transactional
     public ReservationData createReservation(ReservationCreateData reservationCreateData){
         boolean isReservationExists = this.reservationRepository.existsByOrderId(reservationCreateData.getOrderId());
-        if(isReservationExists) throw new BadException("Order is already exists.");
+        if(isReservationExists)
+            this.kafkaEventProcessor.publishOrderCreationFailedEvent(reservationCreateData.getOrderId(), ReservationStatus.INVALID_DATA);
 
         //create reservation
         ReservationEntity reservationEntity = new ReservationEntity();
@@ -84,15 +84,27 @@ public class ReservationService {
         //create reservations
         List<InventoryReservationCreateData> irCreateDataList = reservationCreateData.getReservations();
         for(InventoryReservationCreateData irCreateData : irCreateDataList){
-
-            ProductEntity productEntity = this.productService.getProductEntity(irCreateData.getProductCode());
+            ProductEntity productEntity;
+            try{
+                productEntity = this.productService.getProductEntity(irCreateData.getProductCode());
+            }catch(Exception exp){
+                //Publish event
+                this.kafkaEventProcessor.publishOrderCreationFailedEvent(reservationCreateData.getOrderId(), ReservationStatus.INVALID_DATA);
+                return null;
+            }
 
             //remove product quantity from the inventory
             ProductQuantData productQuantData = new ProductQuantData(irCreateData.getQuantity());
-            this.inventoryService.removeProductFromInventory(
-                    productEntity.getProductCode(),
-                    productQuantData
-                );
+            try{
+                this.inventoryService.removeProductFromInventory(
+                        productEntity.getProductCode(),
+                        productQuantData
+                    );
+            }catch(BadException badException){
+                //Publish event
+                this.kafkaEventProcessor.publishOrderCreationFailedEvent(reservationCreateData.getOrderId(), ReservationStatus.NOT_ENOUGHT_INVENTORY);
+                return null;
+            }
 
             //craete reservation
             ReservationId reservationId = new ReservationId(savedReservationEntity.getOrderId(), productEntity.getId());
@@ -112,38 +124,35 @@ public class ReservationService {
 
         //Publish event
         ReservationEventData reservationEventData = this.reservationMapper.toReservationEventData(savedReservationEntity);
-        this.kafkaEventProcessor.publishReservationSuccessEvent(reservationEventData);
+        this.kafkaEventProcessor.publishReservationCreatedEvent(reservationEventData);
+        this.kafkaEventProcessor.publishOrderStatusChangedEvent(new OrderEventData(reservationCreateData.getOrderId(), ReservationStatus.RESERVED_AWAITING_PAYMENT.name()));
 
         ReservationData reservationData = this.reservationMapper.toDto(savedReservationEntity);
         return reservationData;
     }
 
-    public ReservationData cancelReservation(Long orderId, @Valid CancelReservationData cancelReservationData){
-        ReservationEntity entity = this.restoreReservationItems(orderId, cancelReservationData.getStatus());
-        ReservationData reservationData = this.reservationMapper.toDto(entity);
-        // publish event
-        OrderStatusUpdateEventData orderStatusUpdateEventData = new OrderStatusUpdateEventData(orderId, null);
-        this.kafkaEventProcessor.publishInventoryReleaseEvent(orderStatusUpdateEventData);
-        return reservationData;
-    }
-
-    private ReservationEntity restoreReservationItems(Long orderId, ReservationStatus newStatus){
-        ReservationEntity reservationEntity = this.getReservationEntityByOrderId(orderId);
-
-        List<ReservationStatus> eligibleStatusesForRevertBack = List.of(
-            ReservationStatus.RESERVED_AWAITING_PAYMENT
-        );
+    @Transactional
+    public ReservationEntity releaseReservationItems(Long orderId, ReservationStatus newStatus){
 
         List<ReservationStatus> eligibleNewStatus = List.of(
             ReservationStatus.RELEASED_ORDER_CANCELLED,
-            ReservationStatus.RELEASED_PAYMENT_NOT_RECEIVED
+            ReservationStatus.RELEASED_PAYMENT_FAILED
+        );
+
+        if(!eligibleNewStatus.contains(newStatus))
+            // throw new BadException("Invalid status transition. The requested status '" + newStatus.getLabel() + "' is not allowed.");
+            return null;
+        
+        ReservationEntity reservationEntity = this.getReservationEntityByOrderId(orderId);
+
+        List<ReservationStatus> eligibleStatusesForRevertBack = List.of(
+            ReservationStatus.RESERVED_AWAITING_PAYMENT,
+            ReservationStatus.RESERVED_PAYMENT_COMPLETED
         );
 
         if(!eligibleStatusesForRevertBack.contains(reservationEntity.getStatus())) 
-            throw new BadException("Restoration failed. " + reservationEntity.getStatus().getLabel().toLowerCase() + ".");
-        
-        if(!eligibleNewStatus.contains(newStatus))
-            throw new BadException("Invalid status transition. The requested status '" + newStatus.getLabel() + "' is not allowed.");
+            return null;
+            //throw new BadException("Restoration failed. " + reservationEntity.getStatus().getLabel().toLowerCase() + ".");
         
         //cancel reservations
         List<InventoryReservationEntity> reservations = reservationEntity.getReservations();
@@ -158,7 +167,57 @@ public class ReservationService {
         //cancel reservation
         reservationEntity.setStatus(newStatus);
         ReservationEntity savedReservationEntity = this.reservationRepository.save(reservationEntity);
+
+        //publish events
+        if(newStatus.equals(ReservationStatus.RELEASED_PAYMENT_FAILED)){
+            this.kafkaEventProcessor.publishOrderCancellationFailedEvent(new OrderEventData(orderId, ReservationStatus.RELEASED_PAYMENT_FAILED.name()));
+        }else if(newStatus.equals(ReservationStatus.RELEASED_ORDER_CANCELLED)){
+            this.kafkaEventProcessor.publishOrderCancellationSuccessEvent(new OrderEventData(orderId, ReservationStatus.RELEASED_ORDER_CANCELLED.name()));
+        }
         return savedReservationEntity;
+    }
+
+    @Transactional
+    public ReservationEntity setPaymentSuccessToReservation(Long orderId){
+        ReservationEntity reservationEntity = this.getReservationEntityByOrderId(orderId);
+
+        List<ReservationStatus> eligibleStatusesForRevertBack = List.of(
+            ReservationStatus.RESERVED_AWAITING_PAYMENT
+        );
+
+        if(!eligibleStatusesForRevertBack.contains(reservationEntity.getStatus())) 
+            return null;
+            //throw new BadException("Restoration status update failed. " + reservationEntity.getStatus().getLabel().toLowerCase() + ".");
+
+        reservationEntity.setStatus(ReservationStatus.RESERVED_PAYMENT_COMPLETED);
+        ReservationEntity savedReservationEntity = this.reservationRepository.save(reservationEntity);
+        //publish event
+        this.kafkaEventProcessor.publishOrderCreationSuccessEvent(new OrderEventData(orderId, ReservationStatus.RESERVED_PAYMENT_COMPLETED.name()));
+        return savedReservationEntity;
+    }
+
+    @Transactional
+    public boolean updateReservationStatus(Long orderId, ReservationStatusUpdateData reservationStatusUpdateData){
+
+        List<ReservationStatus> eligibleUpdateStatuses = List.of(ReservationStatus.FULFILLED_DELIVERED);
+
+        if(!eligibleUpdateStatuses.contains(reservationStatusUpdateData.getStatus())) 
+            throw new BadException("Update status is not eligible.");
+
+        ReservationEntity reservationEntity = this.getReservationEntityByOrderId(orderId);
+
+        List<ReservationStatus> eligibleEntityStatuses = List.of(ReservationStatus.RESERVED_PAYMENT_COMPLETED);
+
+        if(!eligibleEntityStatuses.contains(reservationEntity.getStatus())) 
+            throw new BadException("Existing status is not eligible to update with new status.");
+
+        reservationEntity.setStatus(reservationStatusUpdateData.getStatus());
+        this.reservationRepository.save(reservationEntity);
+
+        //publis event
+        this.kafkaEventProcessor.publishOrderStatusChangedEvent(new OrderEventData(orderId, ReservationStatus.FULFILLED_DELIVERED.name()));
+
+        return true;
     }
 
 }

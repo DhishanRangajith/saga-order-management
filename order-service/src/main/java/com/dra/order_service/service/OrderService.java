@@ -9,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import com.dra.order_service.dto.publisherEvent.OrderCancelEventData;
-import com.dra.order_service.dto.publisherEvent.OrderCreateEventData;
+import com.dra.order_service.dto.event.publisherEvent.OrderCancelEventData;
+import com.dra.order_service.dto.event.publisherEvent.OrderCreateEventData;
 import com.dra.order_service.dto.request.OrderCreateData;
 import com.dra.order_service.dto.request.OrderSearchData;
 import com.dra.order_service.dto.request.ProductCreateData;
@@ -67,7 +67,7 @@ public class OrderService {
     public OrderData createOrder(OrderCreateData orderCreateData){
 
         OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setStatus(OrderStatus.PROCESSING);
+        orderEntity.setStatus(OrderStatus.CREATION_PROCESSING);
         Double amount = 0.0;
         OrderEntity savedOrderEntity = this.orderRepository.save(orderEntity);
         savedOrderEntity.setOrderProducts(new ArrayList<>());
@@ -95,52 +95,50 @@ public class OrderService {
 
     @Transactional
     public boolean cancelOrder(Long id){
-
         OrderEntity orderEntity = this.getOrderEntity(id);
         List<OrderStatus> cancelEligibleStatusList = List.of(
-            OrderStatus.INVENTORY_RESERVED_PENDING_PAYMENT,
-            OrderStatus.INVENTORY_UNAVAILABLE,
-            OrderStatus.PROCESSING,
-            OrderStatus.INVALID_DATA
+            OrderStatus.CREATION_SUCCESS,
+            OrderStatus.CREATION_PROCESSING
         );
         if(!cancelEligibleStatusList.contains(orderEntity.getStatus())) 
             throw new BadException("Order is not eligible to cancel.");
               
-        orderEntity.setStatus(OrderStatus.CANCELLED);
+        orderEntity.setStatus(OrderStatus.CANCELLATION_PROCESSING);
         this.orderRepository.save(orderEntity);
-        OrderCancelEventData orderCancelEvent = this.orderMapper.tOrderCancelEvent(orderEntity);
+        OrderCancelEventData orderCancelEvent = this.orderMapper.toOrderCancelEvent(orderEntity);
         this.kafkaEventProcessor.publishOrderCancelledEvent(orderCancelEvent);
         return true;
     }
 
     @Transactional
-    public boolean changeStatus(Long id, OrderStatus newStatus){
+    public boolean changeStatusByEvents(Long id, OrderStatus newStatus, String subStatus){
         OrderEntity orderEntity = this.getOrderEntity(id);
-        boolean checkToUpdate = false;
-        switch (orderEntity.getStatus()) {
-            case INVALID_DATA,INVENTORY_UNAVAILABLE:
-                checkToUpdate = List.of(OrderStatus.CANCELLED).contains(newStatus);
-                break;
-            case INVENTORY_RESERVED_PENDING_PAYMENT:
-                checkToUpdate = List.of(
-                    OrderStatus.CANCELLED,
-                    OrderStatus.INVENTORY_RESERVED_PAYMENT_COMPLETED, 
-                    OrderStatus.CLOSED_DELIVERED).contains(newStatus);
-                break;
-            case INVENTORY_RESERVED_PAYMENT_COMPLETED:
-                checkToUpdate = List.of(OrderStatus.CLOSED_DELIVERED).contains(newStatus);
-                break;
-            default:
-                checkToUpdate = false;
-                break;
+        boolean valid = false;
+        if(newStatus == null){
+            valid = List.of(OrderStatus.CREATION_PROCESSING, OrderStatus.CREATION_SUCCESS)
+                                        .contains(orderEntity.getStatus());
+        }else{
+            switch (newStatus) {
+                case CREATION_SUCCESS:
+                case CREATION_FAILED:
+                    valid = orderEntity.getStatus().equals(OrderStatus.CREATION_PROCESSING);
+                    break;
+
+                case CANCELLATION_SUCCESS:
+                case CANCELLATION_FAILED:
+                    valid = orderEntity.getStatus().equals(OrderStatus.CANCELLATION_PROCESSING);
+                    break;
+                default: break;
+            }
         }
 
-        if(checkToUpdate){
-            orderEntity.setStatus(newStatus);
-            this.orderRepository.save(orderEntity);
-        }else{
-            throw new BadException("Order is not eligible to update with provided status.");
-        }
+        if(!valid)
+            // throw new BadException("Order is not eligible to update with provided status.");
+            return false;
+
+        if(newStatus != null) orderEntity.setStatus(newStatus);
+        orderEntity.setSubStatus(subStatus);
+        this.orderRepository.save(orderEntity);
         return true;
     }
 

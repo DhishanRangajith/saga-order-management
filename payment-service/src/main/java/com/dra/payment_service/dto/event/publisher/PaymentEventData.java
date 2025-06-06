@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentFailRefundEventData {
+public class PaymentEventData {
 
     private Long orderId;
-    private String reason;
 
 }

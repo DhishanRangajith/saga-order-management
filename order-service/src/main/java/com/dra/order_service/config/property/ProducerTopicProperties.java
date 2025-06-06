@@ -5,16 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Getter;
 import lombok.Setter;
 
-@ConfigurationProperties(prefix = "app.topic.producer")
+@ConfigurationProperties(prefix = "app.topic.producer.order")
 @Getter
 @Setter
 public class ProducerTopicProperties {
-    private Order order;
-
-    @Getter
-    @Setter
-    public static class Order {
-        String create;
-        String cancel;
-    }
+    private String creationRequest;
+    private String cancellationRequest;
 }

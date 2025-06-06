@@ -10,18 +10,14 @@ import lombok.Setter;
 @Setter
 public class ConsumerTopicProperties {
     private Inventory inventory;
-    private Payment payment;
 
     @Getter
     @Setter
     public static class Inventory {
-        String orderStatusUpdate;
-    }
-
-    @Getter
-    @Setter
-    public static class Payment {
-        String statusUpdate;
-        String failCancel;
+        String orderStatusChanged;
+        String orderCreationSuccess;
+        String orderCreationFailed;
+        String orderCancellationSuccess;
+        String orderCancellationFailed;
     }
 }

@@ -7,8 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CancelReservationData {
+public class ReservationStatusUpdateData {
 
-    @NotNull(message = "Status is invalid.")
+    @NotNull(message = "Status is required")
     private ReservationStatus status;
+
 }

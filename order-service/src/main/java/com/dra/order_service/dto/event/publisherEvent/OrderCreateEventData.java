@@ -1,4 +1,4 @@
-package com.dra.order_service.dto.publisherEvent;
+package com.dra.order_service.dto.event.publisherEvent;
 
 import java.util.List;
 import lombok.Getter;

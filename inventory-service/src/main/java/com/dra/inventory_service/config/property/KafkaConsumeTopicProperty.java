@@ -14,18 +14,16 @@ public class KafkaConsumeTopicProperty {
 
     @Getter
     @Setter
-    public static class Order { //create=${app.topic.prefix}ORDER_CREATE
-        private String create;
+    public static class Order {
+        private String creationRequest;
     }
 
     @Getter
     @Setter
     public static class Payment {
-        private String paymentFail;
-        private String paymentRefund;
-        private String updatepaymentStatus;
+        private String paymentFailed;
+        private String paymentCancelled;
+        private String paymentSuccess;
     }
 }
-
-
 

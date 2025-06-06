@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public enum PaymentStatus {
 
     PENDING,
-    FAILED_RETRY_POSSIBLE,
+    FAILED,
     CANCELLED_ORDER_CANCELLED,
+    CANCELLED_ORDER_CANCELLED_REFUND,
     COMPLETED;
 
     @JsonCreator
