@@ -15,11 +15,9 @@ This is a microservices-based system for managing orders, inventory, and payment
 - Java 17
 - Spring Boot 3.3
 - Apache Kafka
-- Spring Web
-- Spring Data JPA
-- Spring Cloud Stream (Kafka integration)
-- H2 or PostgreSQL (can be configured)
-- Lombok
+- MySQL
+- Saga Design Pattern
+- 
 
 ---
 
@@ -32,21 +30,22 @@ Handles creating and cancelling orders.
 #### REST APIs
 
 - `POST /orders` - Create a new order
-- `DELETE /orders/{id}` - Cancel an existing order
 - `GET /orders` - Get list of all orders
 - `GET /orders/{id}` - Get details of a specific order
+- `PATCH /orders/{id}/cancel` - Cancel an existing order
 
 #### Kafka Events Sent
 
-- `ORDER.CREATED`
-- `ORDER.CANCELLED_CONFIRMED`
+- `ORDER_CREATION_REQUEST`
+- `ORDER_CANCELLATION_REQUEST`
 
 #### Kafka Events Received
 
-- `INVENTORY.RESERVED`
-- `INVENTORY.STOCK_RELEASED`
-- `PAYMENT.REFUNDED`
-- `PAYMENT.FAIL_CANCEL`
+- `ORDER_STATUS_CHANGED`
+- `ORDER_CREATION_SUCCESS`
+- `ORDER_CREATION_FAILED`
+- `ORDER_CANCELLATION_SUCCESS`
+- `ORDER_CANCELLATION_FAILED`
 
 ---
 
@@ -57,13 +56,17 @@ Manages product data and inventory reservations.
 #### REST APIs
 
 - `POST /products` - Add a new product
-- `PUT /products/{id}` - Update product details
+- `PATCH /products/{id}` - Update name/price/status of product details
 - `GET /products` - Get list of products
 - `GET /products/{id}` - Get product details
-- `PUT /inventory/add` - Increase product stock
-- `PUT /inventory/remove` - Decrease product stock
+
+- `GET /inventory` - Search inventory data
+- `PATCH /inventory/product/{productCode}/add` - Increase product stock
+- `PATCH /inventory/product/{productCode}/remove` - Decrease product stock
+
 - `GET /reservations` - Get all reservations
 - `GET /reservations/{id}` - Get details of a reservation
+- `PATCH /reservations/orders/{orderId}/status` - Update reservation status(to delievery status only)
 
 #### Kafka Events Sent
 
