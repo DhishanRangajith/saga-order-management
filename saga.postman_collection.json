@@ -1,0 +1,1488 @@
+{
+	"info": {
+		"_postman_id": "4a594752-34f6-45b1-938c-68991c054a89",
+		"name": "saga",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2205758"
+	},
+	"item": [
+		{
+			"name": "inventory",
+			"item": [
+				{
+					"name": "product",
+					"item": [
+						{
+							"name": "product create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Banana 001\",\r\n    \"price\": 23.50,\r\n    \"status\": \"ACTIVE\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/products",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "201",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\":\"Banana 001\",\r\n    \"price\": 23.50,\r\n    \"status\": \"ACTIVE\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/products",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"products"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 10:54:06 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 6,\n    \"name\": \"Banana 001\",\n    \"productCode\": \"202505311624063214\",\n    \"status\": \"ACTIVE\",\n    \"price\": 23.5,\n    \"createdAt\": \"2025-05-31T16:24:06.1616786\",\n    \"updatedAt\": \"2025-05-31T16:24:06.1626788\"\n}"
+								}
+							]
+						},
+						{
+							"name": "product search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/products?status=ACTIVE",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "ACTIVE"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/products?status=ACTIVE",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"products"
+											],
+											"query": [
+												{
+													"key": "status",
+													"value": "ACTIVE"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 14:37:18 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"content\": [\n        {\n            \"id\": 4,\n            \"name\": \"Banana 001\",\n            \"productCode\": \"202505311615296049\",\n            \"status\": \"ACTIVE\",\n            \"price\": 23.5,\n            \"createdAt\": \"2025-05-31T16:15:29\",\n            \"updatedAt\": \"2025-05-31T16:15:29\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Banana 001\",\n            \"productCode\": \"202505311024532541\",\n            \"status\": \"ACTIVE\",\n            \"price\": 23.5,\n            \"createdAt\": \"2025-05-31T10:24:53\",\n            \"updatedAt\": \"2025-05-31T10:24:53\"\n        },\n        {\n            \"id\": 1,\n            \"name\": \"Banana 001\",\n            \"productCode\": \"20250531094444-9384\",\n            \"status\": \"ACTIVE\",\n            \"price\": 23.5,\n            \"createdAt\": \"2025-05-31T09:44:44\",\n            \"updatedAt\": \"2025-05-31T09:44:44\"\n        }\n    ],\n    \"pageable\": {\n        \"pageNumber\": 0,\n        \"pageSize\": 10000,\n        \"sort\": {\n            \"empty\": false,\n            \"sorted\": true,\n            \"unsorted\": false\n        },\n        \"offset\": 0,\n        \"paged\": true,\n        \"unpaged\": false\n    },\n    \"last\": true,\n    \"totalElements\": 3,\n    \"totalPages\": 1,\n    \"first\": true,\n    \"size\": 10000,\n    \"number\": 0,\n    \"sort\": {\n        \"empty\": false,\n        \"sorted\": true,\n        \"unsorted\": false\n    },\n    \"numberOfElements\": 3,\n    \"empty\": false\n}"
+								}
+							]
+						},
+						{
+							"name": "product update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"Sadsds\",\r\n    \"price\" : 23,\r\n    \"status\" : \"INACTIVE\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/products/202505311624063214",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"202505311624063214"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\" : \"Sadsds\",\r\n    \"price\" : 23,\r\n    \"status\" : \"INACTIVE\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/products/202505311624063214",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"products",
+												"202505311624063214"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 11:07:04 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 6,\n    \"name\": \"Sadsds\",\n    \"productCode\": \"202505311624063214\",\n    \"status\": \"INACTIVE\",\n    \"price\": 23,\n    \"createdAt\": \"2025-05-31T16:24:06\",\n    \"updatedAt\": \"2025-05-31T16:37:01\"\n}"
+								}
+							]
+						},
+						{
+							"name": "product get",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/products/202505311024532541",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"202505311024532541"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/products/202505311624063214",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"products",
+												"202505311624063214"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 10:57:56 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 6,\n    \"name\": \"Banana 001\",\n    \"productCode\": \"202505311624063214\",\n    \"status\": \"ACTIVE\",\n    \"price\": 23.5,\n    \"createdAt\": \"2025-05-31T16:24:06\",\n    \"updatedAt\": \"2025-05-31T16:24:06\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "reservation",
+					"item": [
+						{
+							"name": "reservation get",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/reservations/orders/19200",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"reservations",
+										"orders",
+										"19200"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/orders/19200",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"orders",
+												"19200"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 21:57:56 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"orderId\": 19200,\n    \"status\": \"RESERVED\",\n    \"reservations\": [\n        {\n            \"productCode\": \"202506010300041283\",\n            \"productName\": \"Key Board DF400\",\n            \"price\": 2500,\n            \"quantity\": 5\n        },\n        {\n            \"productCode\": \"202506010300476791\",\n            \"productName\": \"SAMSUNG Monitor\",\n            \"price\": 35000,\n            \"quantity\": 3\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "reservations search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/reservations",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"reservations"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/orders",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"orders"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 21:57:30 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"content\": [\n        {\n            \"orderId\": 19200,\n            \"status\": \"RESERVED\",\n            \"reservations\": [\n                {\n                    \"productCode\": \"202506010300041283\",\n                    \"productName\": \"Key Board DF400\",\n                    \"price\": 2500,\n                    \"quantity\": 5\n                },\n                {\n                    \"productCode\": \"202506010300476791\",\n                    \"productName\": \"SAMSUNG Monitor\",\n                    \"price\": 35000,\n                    \"quantity\": 3\n                }\n            ]\n        },\n        {\n            \"orderId\": 19290,\n            \"status\": \"RESERVED\",\n            \"reservations\": [\n                {\n                    \"productCode\": \"202506010300041283\",\n                    \"productName\": \"Key Board DF400\",\n                    \"price\": 2500,\n                    \"quantity\": 14\n                },\n                {\n                    \"productCode\": \"202506010300476791\",\n                    \"productName\": \"SAMSUNG Monitor\",\n                    \"price\": 35000,\n                    \"quantity\": 6\n                }\n            ]\n        },\n        {\n            \"orderId\": 19293,\n            \"status\": \"CANCELLED\",\n            \"reservations\": [\n                {\n                    \"productCode\": \"202506010300041283\",\n                    \"productName\": \"Key Board DF400\",\n                    \"price\": 2500,\n                    \"quantity\": 14\n                },\n                {\n                    \"productCode\": \"202506010300476791\",\n                    \"productName\": \"SAMSUNG Monitor\",\n                    \"price\": 35000,\n                    \"quantity\": 6\n                }\n            ]\n        },\n        {\n            \"orderId\": 11293,\n            \"status\": \"CANCELLED\",\n            \"reservations\": [\n                {\n                    \"productCode\": \"202506010300041283\",\n                    \"productName\": \"Key Board DF400\",\n                    \"price\": 2500,\n                    \"quantity\": 6\n                },\n                {\n                    \"productCode\": \"202506010300476791\",\n                    \"productName\": \"SAMSUNG Monitor\",\n                    \"price\": 35000,\n                    \"quantity\": 9\n                }\n            ]\n        },\n        {\n            \"orderId\": 1123,\n            \"status\": \"RESERVED\",\n            \"reservations\": [\n                {\n                    \"productCode\": \"202506010300041283\",\n                    \"productName\": \"Key Board DF400\",\n                    \"price\": 2500,\n                    \"quantity\": 1\n                },\n                {\n                    \"productCode\": \"202506010300476791\",\n                    \"productName\": \"SAMSUNG Monitor\",\n                    \"price\": 35000,\n                    \"quantity\": 2\n                }\n            ]\n        },\n        {\n            \"orderId\": 23,\n            \"status\": \"RESERVED\",\n            \"reservations\": []\n        }\n    ],\n    \"pageable\": {\n        \"pageNumber\": 0,\n        \"pageSize\": 10000,\n        \"sort\": {\n            \"sorted\": true,\n            \"empty\": false,\n            \"unsorted\": false\n        },\n        \"offset\": 0,\n        \"paged\": true,\n        \"unpaged\": false\n    },\n    \"last\": true,\n    \"totalElements\": 6,\n    \"totalPages\": 1,\n    \"first\": true,\n    \"size\": 10000,\n    \"number\": 0,\n    \"sort\": {\n        \"sorted\": true,\n        \"empty\": false,\n        \"unsorted\": false\n    },\n    \"numberOfElements\": 6,\n    \"empty\": false\n}"
+								}
+							]
+						},
+						{
+							"name": "reservation update status",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\" : \"FULFILLED_DELIVERED\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/reservations/orders/9/status",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"reservations",
+										"orders",
+										"9",
+										"status"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"status\" : \"FULFILLED_DELIVERED\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/reservations/orders/9/status",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"reservations",
+												"orders",
+												"9",
+												"status"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "plain",
+									"header": [
+										{
+											"key": "Content-Length",
+											"value": "0"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 06 Jun 2025 12:20:58 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "inventory",
+					"item": [
+						{
+							"name": "inventory remove product",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantity\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/inventory/product/202505311024532541/remove",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"inventory",
+										"product",
+										"202505311024532541",
+										"remove"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"quantity\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/inventory/product/202505311024532541/remove",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"inventory",
+												"product",
+												"202505311024532541",
+												"remove"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 11:59:05 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 1,\n    \"product\": {\n        \"id\": 3,\n        \"name\": \"Banana 001\",\n        \"productCode\": \"202505311024532541\",\n        \"status\": \"ACTIVE\",\n        \"price\": 23.5,\n        \"createdAt\": \"2025-05-31T10:24:53\",\n        \"updatedAt\": \"2025-05-31T10:24:53\"\n    },\n    \"quantity\": 100,\n    \"createdAt\": \"2025-05-31T17:12:29\",\n    \"updatedAt\": \"2025-05-31T17:29:01\"\n}"
+								}
+							]
+						},
+						{
+							"name": "inventory search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/inventory",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"inventory"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/inventory",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"inventory"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 11:44:04 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"content\": [\n        {\n            \"id\": 1,\n            \"product\": {\n                \"id\": 3,\n                \"name\": \"Banana 001\",\n                \"productCode\": \"202505311024532541\",\n                \"status\": \"ACTIVE\",\n                \"price\": 23.5,\n                \"createdAt\": \"2025-05-31T10:24:53\",\n                \"updatedAt\": \"2025-05-31T10:24:53\"\n            },\n            \"quantity\": 101,\n            \"createdAt\": \"2025-05-31T17:12:29\",\n            \"updatedAt\": \"2025-05-31T17:13:21\"\n        }\n    ],\n    \"pageable\": {\n        \"pageNumber\": 0,\n        \"pageSize\": 10000,\n        \"sort\": {\n            \"empty\": true,\n            \"unsorted\": true,\n            \"sorted\": false\n        },\n        \"offset\": 0,\n        \"unpaged\": false,\n        \"paged\": true\n    },\n    \"last\": true,\n    \"totalPages\": 1,\n    \"totalElements\": 1,\n    \"first\": true,\n    \"size\": 10000,\n    \"number\": 0,\n    \"sort\": {\n        \"empty\": true,\n        \"unsorted\": true,\n        \"sorted\": false\n    },\n    \"numberOfElements\": 1,\n    \"empty\": false\n}"
+								}
+							]
+						},
+						{
+							"name": "inventory add product",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantity\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{inventory_server}}/api/v1/inventory/product/202505311024532541/add",
+									"host": [
+										"{{inventory_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"inventory",
+										"product",
+										"202505311024532541",
+										"add"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "400-invalid",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"quantity\": 100\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/inventory/product/22222/add",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"inventory",
+												"product",
+												"22222",
+												"add"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 11:36:37 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Invalid data\",\n    \"data\": {\n        \"productCode\": \"Product is not found.\"\n    }\n}"
+								},
+								{
+									"name": "400 - inactive",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"quantity\": 100\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/inventory/product/202505311624063214/add",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"inventory",
+												"product",
+												"202505311624063214",
+												"add"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 11:41:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Invalid data\",\n    \"data\": {\n        \"productCode\": \"Product is inactive.\"\n    }\n}"
+								},
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"quantity\": 100\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{inventory_server}}/api/v1/inventory/product/202505311024532541/add",
+											"host": [
+												"{{inventory_server}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"inventory",
+												"product",
+												"202505311024532541",
+												"add"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 31 May 2025 11:42:29 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 1,\n    \"product\": {\n        \"id\": 3,\n        \"name\": \"Banana 001\",\n        \"productCode\": \"202505311024532541\",\n        \"status\": \"ACTIVE\",\n        \"price\": 23.5,\n        \"createdAt\": \"2025-05-31T10:24:53\",\n        \"updatedAt\": \"2025-05-31T10:24:53\"\n    },\n    \"quantity\": 100,\n    \"createdAt\": \"2025-05-31T17:12:29.8108041\",\n    \"updatedAt\": \"2025-05-31T17:12:29.8108041\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "create order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"name\": \"Caps\",\r\n            \"productCode\": \"234323432\",\r\n            \"quantity\": 20,\r\n            \"price\": 1000\r\n        },\r\n        {\r\n            \"name\": \"Balls\",\r\n            \"productCode\": \"22233333333\",\r\n            \"quantity\": 103,\r\n            \"price\": 150.30\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{order_server}}/api/v1/orders",
+							"host": [
+								"{{order_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"name\": \"Caps\",\r\n            \"productCode\": \"234323432\",\r\n            \"quantity\": 20,\r\n            \"price\": 1000\r\n        },\r\n        {\r\n            \"name\": \"Balls\",\r\n            \"productCode\": \"22233333333\",\r\n            \"quantity\": 103,\r\n            \"price\": 150.30\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{order_server}}/api/v1/orders",
+									"host": [
+										"{{order_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Jun 2025 05:48:08 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 5,\n    \"status\": \"PROCESSING\",\n    \"amount\": 35480.9,\n    \"products\": [\n        {\n            \"productCode\": 234323432,\n            \"name\": \"Caps\",\n            \"price\": 1000,\n            \"quantity\": 20\n        },\n        {\n            \"productCode\": 22233333333,\n            \"name\": \"Balls\",\n            \"price\": 150.3,\n            \"quantity\": 103\n        }\n    ],\n    \"createdAt\": \"2025-06-02T11:18:08.220975\",\n    \"updatedAt\": \"2025-06-02T11:18:08.220975\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get order list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{order_server}}/api/v1/orders?productCode=9999999",
+							"host": [
+								"{{order_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "productCode",
+									"value": "9999999"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{order_server}}/api/v1/orders?productCode=9999999",
+									"host": [
+										"{{order_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "productCode",
+											"value": "9999999"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Jun 2025 05:50:21 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"content\": [\n        {\n            \"id\": 7,\n            \"status\": \"PROCESSING\",\n            \"amount\": 15480.900000000001,\n            \"products\": [\n                {\n                    \"productCode\": 9999999,\n                    \"name\": \"vvvvvvvvv\",\n                    \"price\": 150.3,\n                    \"quantity\": 103\n                }\n            ],\n            \"createdAt\": \"2025-06-02T11:20:15\",\n            \"updatedAt\": \"2025-06-02T11:20:15\"\n        }\n    ],\n    \"pageable\": {\n        \"pageNumber\": 0,\n        \"pageSize\": 2147483647,\n        \"sort\": {\n            \"empty\": false,\n            \"sorted\": true,\n            \"unsorted\": false\n        },\n        \"offset\": 0,\n        \"paged\": true,\n        \"unpaged\": false\n    },\n    \"totalPages\": 1,\n    \"totalElements\": 1,\n    \"last\": true,\n    \"size\": 2147483647,\n    \"number\": 0,\n    \"sort\": {\n        \"empty\": false,\n        \"sorted\": true,\n        \"unsorted\": false\n    },\n    \"first\": true,\n    \"numberOfElements\": 1,\n    \"empty\": false\n}"
+						},
+						{
+							"name": "get order list",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{order_server}}/api/v1/orders?productCode=9999999",
+									"host": [
+										"{{order_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "productCode",
+											"value": "9999999"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 12:56:48 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"content\": [\n        {\n            \"id\": 7,\n            \"status\": \"PROCESSING\",\n            \"amount\": 15480.900000000001,\n            \"products\": [\n                {\n                    \"productCode\": 9999999,\n                    \"name\": \"vvvvvvvvv\",\n                    \"price\": 150.3,\n                    \"quantity\": 103\n                }\n            ],\n            \"createdAt\": \"2025-06-02T11:20:15\",\n            \"updatedAt\": \"2025-06-02T11:20:15\"\n        }\n    ],\n    \"pageable\": {\n        \"pageNumber\": 0,\n        \"pageSize\": 2147483647,\n        \"sort\": {\n            \"empty\": false,\n            \"sorted\": true,\n            \"unsorted\": false\n        },\n        \"offset\": 0,\n        \"paged\": true,\n        \"unpaged\": false\n    },\n    \"last\": true,\n    \"totalElements\": 1,\n    \"totalPages\": 1,\n    \"first\": true,\n    \"size\": 2147483647,\n    \"number\": 0,\n    \"sort\": {\n        \"empty\": false,\n        \"sorted\": true,\n        \"unsorted\": false\n    },\n    \"numberOfElements\": 1,\n    \"empty\": false\n}"
+						}
+					]
+				},
+				{
+					"name": "get order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{order_server}}/api/v1/orders/1",
+							"host": [
+								"{{order_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{order_server}}/api/v1/orders/5",
+									"host": [
+										"{{order_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"5"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Jun 2025 05:48:48 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 5,\n    \"status\": \"PROCESSING\",\n    \"amount\": 35480.9,\n    \"products\": [\n        {\n            \"productCode\": 22233333333,\n            \"name\": \"Balls\",\n            \"price\": 150.3,\n            \"quantity\": 103\n        },\n        {\n            \"productCode\": 234323432,\n            \"name\": \"Caps\",\n            \"price\": 1000,\n            \"quantity\": 20\n        }\n    ],\n    \"createdAt\": \"2025-06-02T11:18:08\",\n    \"updatedAt\": \"2025-06-02T11:18:08\"\n}"
+						}
+					]
+				},
+				{
+					"name": "cancel order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{order_server}}/api/v1/orders/1/cancel",
+							"host": [
+								"{{order_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"1",
+								"cancel"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "202",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{order_server}}/api/v1/orders/6/cancel",
+									"host": [
+										"{{order_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"6",
+										"cancel"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Jun 2025 06:07:49 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"Accepted\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "payment",
+			"item": [
+				{
+					"name": "payments search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{payment_server}}/api/v1/payments",
+							"host": [
+								"{{payment_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payments"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{payment_server}}/api/v1/payments",
+									"host": [
+										"{{payment_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 01 Jun 2025 07:55:27 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"content\": [\n        {\n            \"id\": \"38315638-8e58-48b9-9c3e-9e93928c28d8\",\n            \"orderId\": 31434,\n            \"amount\": 11030,\n            \"status\": \"PENDING\",\n            \"createdAt\": \"2025-06-01T13:24:52\",\n            \"updatedAt\": \"2025-06-01T13:24:52\"\n        },\n        {\n            \"id\": \"2711162c-8e91-4989-8302-b9d23994b818\",\n            \"orderId\": 3434,\n            \"amount\": 33030,\n            \"status\": \"PENDING\",\n            \"createdAt\": \"2025-06-01T13:24:46\",\n            \"updatedAt\": \"2025-06-01T13:24:46\"\n        },\n        {\n            \"id\": \"6c424209-6793-4e26-b24d-f407ca30b1a4\",\n            \"orderId\": 2222,\n            \"amount\": 3300,\n            \"status\": \"PENDING\",\n            \"createdAt\": \"2025-06-01T13:24:40\",\n            \"updatedAt\": \"2025-06-01T13:24:40\"\n        },\n        {\n            \"id\": \"231a6f78-d53d-466a-830b-0facebb09745\",\n            \"orderId\": 2224225,\n            \"amount\": 12100,\n            \"status\": \"PENDING\",\n            \"createdAt\": \"2025-06-01T13:24:30\",\n            \"updatedAt\": \"2025-06-01T13:24:30\"\n        },\n        {\n            \"id\": \"b4ed25e5-f02d-4698-b038-9a251efa4806\",\n            \"orderId\": 224225,\n            \"amount\": 14100,\n            \"status\": \"PENDING\",\n            \"createdAt\": \"2025-06-01T13:24:25\",\n            \"updatedAt\": \"2025-06-01T13:24:25\"\n        },\n        {\n            \"id\": \"aa189a12-755a-469f-a20d-d3ad0a73e24c\",\n            \"orderId\": 324225,\n            \"amount\": 24000,\n            \"status\": \"PENDING\",\n            \"createdAt\": \"2025-06-01T13:24:16\",\n            \"updatedAt\": \"2025-06-01T13:24:16\"\n        }\n    ],\n    \"pageable\": {\n        \"pageNumber\": 0,\n        \"pageSize\": 10000,\n        \"sort\": {\n            \"empty\": false,\n            \"unsorted\": false,\n            \"sorted\": true\n        },\n        \"offset\": 0,\n        \"unpaged\": false,\n        \"paged\": true\n    },\n    \"last\": true,\n    \"totalElements\": 6,\n    \"totalPages\": 1,\n    \"first\": true,\n    \"size\": 10000,\n    \"number\": 0,\n    \"sort\": {\n        \"empty\": false,\n        \"unsorted\": false,\n        \"sorted\": true\n    },\n    \"numberOfElements\": 6,\n    \"empty\": false\n}"
+						}
+					]
+				},
+				{
+					"name": "payments get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{payment_server}}/api/v1/payments/orders/2224225",
+							"host": [
+								"{{payment_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"orders",
+								"2224225"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{payment_server}}/api/v1/payments/orders/2224225",
+									"host": [
+										"{{payment_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments",
+										"orders",
+										"2224225"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 01 Jun 2025 07:56:36 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"231a6f78-d53d-466a-830b-0facebb09745\",\n    \"orderId\": 2224225,\n    \"amount\": 12100,\n    \"status\": \"PENDING\",\n    \"createdAt\": \"2025-06-01T13:24:30\",\n    \"updatedAt\": \"2025-06-01T13:24:30\"\n}"
+						}
+					]
+				},
+				{
+					"name": "payments update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\" : \"COMPLETED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{payment_server}}/api/v1/payments/orders/9/status",
+							"host": [
+								"{{payment_server}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"orders",
+								"9",
+								"status"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\" : \"CANcELED\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{payment_server}}/api/v1/payments/orders/2224225",
+									"host": [
+										"{{payment_server}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments",
+										"orders",
+										"2224225"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 01 Jun 2025 08:08:27 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"231a6f78-d53d-466a-830b-0facebb09745\",\n    \"orderId\": 2224225,\n    \"amount\": 12100,\n    \"status\": \"CANCELED\",\n    \"createdAt\": \"2025-06-01T13:24:30\",\n    \"updatedAt\": \"2025-06-01T13:35:44\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

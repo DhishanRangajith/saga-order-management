@@ -62,8 +62,6 @@ Manages product data and inventory reservations.
 - `GET /products/{id}` - Get product details
 - `PUT /inventory/add` - Increase product stock
 - `PUT /inventory/remove` - Decrease product stock
-- `POST /reservations` - Reserve inventory
-- `DELETE /reservations/{id}` - Cancel a reservation
 - `GET /reservations` - Get all reservations
 - `GET /reservations/{id}` - Get details of a reservation
 
@@ -115,6 +113,14 @@ The Saga pattern is used to coordinate the steps of order fulfillment:
    - Cancel the inventory reservation
    - Refund the payment
    - Cancel the order
+
+---
+
+## Testing
+
+You can use the provided Postman collection to test the end-to-end Saga workflow across microservices.
+
+[Download Postman Collection (saga.postman_collection.json)](./saga.postman_collection.json)
 
 ---
 
