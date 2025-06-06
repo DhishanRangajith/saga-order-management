@@ -23,85 +23,93 @@ This is a microservices-based system for managing orders, inventory, and payment
 
 ## Microservices
 
-### 1. Order Service
+Got it! Here's the cleaned-up version of your **microservices documentation** in proper `README.md` style using `#`, `##`, `###` headers and plain `-` list formatting (suitable for a GitHub README):
+
+---
+
+# Microservices
+
+## 1. Order Service
 
 Handles creating and cancelling orders.
 
-#### REST APIs
+### REST APIs
 
-- `POST /orders` - Create a new order
-- `GET /orders` - Get list of all orders
-- `GET /orders/{id}` - Get details of a specific order
-- `PATCH /orders/{id}/cancel` - Cancel an existing order
+* `POST /orders` - Create a new order
+* `GET /orders` - Get list of all orders
+* `GET /orders/{id}` - Get details of a specific order
+* `PATCH /orders/{id}/cancel` - Cancel an existing order
 
-#### Kafka Events Sent
+### Kafka Events Sent
 
-- `ORDER_CREATION_REQUEST`
-- `ORDER_CANCELLATION_REQUEST`
+* `ORDER_CREATION_REQUEST` - Emit order creation data to the Inventory Service
+* `ORDER_CANCELLATION_REQUEST` - Emit order cancellation request to the Payment Service
 
-#### Kafka Events Received
+### Kafka Events Received
 
-- `ORDER_STATUS_CHANGED`
-- `ORDER_CREATION_SUCCESS`
-- `ORDER_CREATION_FAILED`
-- `ORDER_CANCELLATION_SUCCESS`
-- `ORDER_CANCELLATION_FAILED`
-
----
-
-### 2. Inventory Service
-
-Manages product data and inventory reservations.
-
-#### REST APIs
-
-- `POST /products` - Add a new product
-- `PATCH /products/{id}` - Update name/price/status of product details
-- `GET /products` - Get list of products
-- `GET /products/{id}` - Get product details
-
-- `GET /inventory` - Search inventory data
-- `PATCH /inventory/product/{productCode}/add` - Increase product stock
-- `PATCH /inventory/product/{productCode}/remove` - Decrease product stock
-
-- `GET /reservations` - Get all reservations
-- `GET /reservations/{id}` - Get details of a reservation
-- `PATCH /reservations/orders/{orderId}/status` - Update reservation status(to delievery status only)
-
-#### Kafka Events Sent
-
-- `INVENTORY.RESERVED`
-- `INVENTORY.STOCK_RELEASED`
-- `INVENTORY.STATUS_UPDATE`
-
-#### Kafka Events Received
-
-- `ORDER.CREATED`
-- `PAYMENT.FAIL`
+* `ORDER_STATUS_CHANGED` - Update the order's status based on inventory results (e.g., NOT\_ENOUGH\_INVENTORY, RESERVED\_AWAITING\_PAYMENT)
+* `ORDER_CREATION_SUCCESS` - Mark the order as successfully created and paid
+* `ORDER_CREATION_FAILED` - Mark the order as failed (due to payment failure, invalid data, etc.)
+* `ORDER_CANCELLATION_SUCCESS` - Mark the order as successfully cancelled
+* `ORDER_CANCELLATION_FAILED` - Mark the order as cancellation failed
 
 ---
 
-### 3. Payment Service
+## 2. Inventory Service
 
-Handles processing and updating payments.
+Manages product data, inventory levels, and reservation logic.
 
-#### REST APIs
+### REST APIs
 
-- `GET /payments/{id}` - Get payment details
-- `GET /payments` - Get list of payments
-- `POST /payments` - Save a payment
-- `PUT /payments/status` - Update payment status
+* `POST /products` - Add a new product
+* `PATCH /products/{id}` - Update name, price, or status of a product
+* `GET /products` - Get list of all products
+* `GET /products/{id}` - Get details of a specific product
+* `GET /inventory` - View or search current inventory data
+* `PATCH /inventory/product/{productCode}/add` - Increase stock of a specific product
+* `PATCH /inventory/product/{productCode}/remove` - Decrease stock of a specific product
+* `GET /reservations` - Get list of all reservations
+* `GET /reservations/{id}` - Get details of a specific reservation
+* `PATCH /reservations/orders/{orderId}/status` - Update reservation status (only to "DELIVERY" status)
 
-#### Kafka Events Sent
+### Kafka Events Sent
 
-- `PAYMENT.FAIL`
-- `PAYMENT.STATUS_UPDATE`
-- `PAYMENT.REFUNDED`
-- `PAYMENT.FAIL_CANCEL`
+* `RESERVATION_CREATED` - Sent after reserving inventory for an order
+* `ORDER_STATUS_CHANGED` - Sent when reservation status changes (used to update order process)
+* `ORDER_CREATION_SUCCESS` - Sent when inventory reservation and payment succeed
+* `ORDER_CREATION_FAILED` - Sent if reservation or payment fails
+* `ORDER_CANCELLATION_SUCCESS` - Sent after inventory is successfully released during cancellation
+* `ORDER_CANCELLATION_FAILED` - Sent if inventory release fails during cancellation
 
-#### Kafka Events Received
+### Kafka Events Received
 
-- `INVENTORY.RESERVED`
+* `ORDER_CREATION_REQUEST` - Received to create a pending reservation for a new order
+* `PAYMENT_FAILED` - Received to revert reservation and update status when payment fails
+* `PAYMENT_CANCELLED` - Received to cancel reservation and release stock when payment is cancelled
+* `PAYMENT_SUCCESS` - Received to confirm the reservation and update status for delivery
+
+---
+
+## 3. Payment Service
+
+Handles payment processing and updates.
+
+### REST APIs
+
+* `GET /payments/{id}` - Get details of a specific payment
+* `GET /payments` - Get list of all payments
+* `PATCH /payments/orders/{orderId}/status` - Update payment status (only as payment success or failed)
+
+### Kafka Events Sent
+
+* `PAYMENT_SUCCESS` - Sent when payment is successfully completed
+* `PAYMENT_FAILED` - Sent when payment processing fails
+* `PAYMENT_CANCELLED` - Sent when a payment is cancelled
+
+### Kafka Events Received
+
+* `ORDER_CANCELLATION_REQUEST` - Received to process cancellation and update payment if needed
+* `RESERVATION_CREATED` - Received to initiate payment processing after reservation is made
 
 ---
 
