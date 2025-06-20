@@ -17,12 +17,6 @@
 
 ---
 
-## Microservices
-
-Got it! Here's the cleaned-up version of your **microservices documentation** in proper `README.md` style using `#`, `##`, `###` headers and plain `-` list formatting (suitable for a GitHub README):
-
----
-
 # Microservices
 
 ## 1. Order Service
