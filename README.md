@@ -1,9 +1,5 @@
 # Order Management Microservices System
 
-This is a microservices-based system for managing orders, inventory, and payments. It is built using Spring Boot 3.3, Java 17, and Apache Kafka. The system uses an event-driven architecture with the Saga pattern to keep data consistent across services.
-
----
-
 ## Architecture Overview
 
 ![Architecture Diagram](./system.png)
